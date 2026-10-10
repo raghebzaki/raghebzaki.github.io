@@ -8,11 +8,38 @@ import '../../shared/widgets/gradient_text.dart';
 import '../../shared/widgets/section_container.dart';
 import '../../shared/widgets/tag_pill.dart';
 import 'widgets/cta_row.dart';
+import 'widgets/hero_avatar.dart';
 import 'widgets/hero_backdrop.dart';
 import 'widgets/stats_bar.dart';
 
-class HeroSection extends StatelessWidget {
+class HeroSection extends StatefulWidget {
   const HeroSection({super.key});
+
+  @override
+  State<HeroSection> createState() => _HeroSectionState();
+}
+
+class _HeroSectionState extends State<HeroSection> {
+  bool _precached = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_precached) return;
+    _precached = true;
+    // Decode the portrait at its display size so it is ready with the first
+    // hero paint. A missing asset falls back to the initials in the avatar.
+    final profile = context.read<PortfolioRepository>().profile;
+    final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+    precacheImage(
+      ResizeImage(
+        AssetImage(profile.avatarAsset),
+        width: (AppLayout.avatarPhoto * pixelRatio).ceil(),
+      ),
+      context,
+      onError: (error, stackTrace) {},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +57,8 @@ class HeroSection extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  HeroAvatar(profile),
+                  const SizedBox(height: AppSpacing.s24),
                   TagPill(
                     profile.title,
                     tone: TagTone.hot,

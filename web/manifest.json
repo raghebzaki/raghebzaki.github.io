@@ -5,8 +5,8 @@
     "display": "standalone",
     "background_color": "#0B0F19",
     "theme_color": "#0B0F19",
-    "description": "Senior Flutter Developer portfolio of Ragheb Zaki.",
-    "orientation": "portrait-primary",
+    "description": "Ragheb Zaki — Senior Flutter Developer. Portfolio of shipped mobile and cross-platform apps.",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

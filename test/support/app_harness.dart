@@ -6,6 +6,8 @@ import 'package:ragheb_portfolio/features/shell/cubit/navigation_cubit.dart';
 import 'package:ragheb_portfolio/features/shell/portfolio_page.dart';
 import 'package:ragheb_portfolio/features/shell/section_id.dart';
 
+import 'settle.dart';
+
 /// flutter_test renders every font as Ahem unless the app fonts are loaded;
 /// size-sensitive tests need the real metrics.
 Future<void> loadAppFonts() async {
@@ -38,7 +40,7 @@ Future<void> pumpSection(
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(const PortfolioApp());
-  await tester.pumpAndSettle();
+  await settle(tester);
   navigationOf(tester).scrollTo(section);
-  await tester.pumpAndSettle();
+  await settle(tester);
 }

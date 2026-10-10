@@ -9,6 +9,9 @@ const profile = Profile(
   location: 'Cairo, Egypt',
   availability: 'Open to senior Flutter roles and product collaborations.',
   resumePath: 'files/Ragheb_Zaki_CV.pdf',
+  avatarAsset: 'assets/images/avatar.jpg',
+  avatarLabel: 'Photo of Ragheb Zaki',
+  statusLabel: 'Open to opportunities',
   stats: [
     Stat(value: 4, suffix: '+', label: 'Years Experience'),
     Stat(value: 30, suffix: '+', label: 'Shipped Live Apps'),

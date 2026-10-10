@@ -41,6 +41,9 @@ class Profile extends Equatable {
     required this.location,
     required this.availability,
     required this.resumePath,
+    required this.avatarAsset,
+    required this.avatarLabel,
+    required this.statusLabel,
     required this.stats,
     required this.socials,
   });
@@ -55,8 +58,25 @@ class Profile extends Equatable {
 
   /// Relative path (respects the document base-href).
   final String resumePath;
+
+  /// Bundled asset path of the portrait shown in the hero.
+  final String avatarAsset;
+
+  /// Accessible description of the portrait.
+  final String avatarLabel;
+
+  /// Availability status shown on (and announced for) the avatar's dot.
+  final String statusLabel;
   final List<Stat> stats;
   final List<SocialLink> socials;
+
+  /// The first social link of [type], if any.
+  SocialLink? socialOf(SocialType type) {
+    for (final social in socials) {
+      if (social.type == type) return social;
+    }
+    return null;
+  }
 
   @override
   List<Object?> get props => [
@@ -68,6 +88,9 @@ class Profile extends Equatable {
     location,
     availability,
     resumePath,
+    avatarAsset,
+    avatarLabel,
+    statusLabel,
     stats,
     socials,
   ];

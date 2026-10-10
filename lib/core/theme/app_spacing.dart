@@ -107,6 +107,25 @@ abstract final class AppLayout {
   static const double skillBarsHeight = 56;
   static const double skillLayerIndent = 14;
 
+  /// Hero avatar (outer ring box, inner photo, status dot, halo scale).
+  static const double avatarSize = 88;
+  static const double avatarRing = 2;
+  static const double avatarPhoto = 84;
+  static const double statusDotSize = 16;
+  static const double statusDotRing = 3;
+  static const double statusDotInset = 2;
+  static const double statusHaloScale = 2.2;
+
+  /// Timeline rail, gutter and dots.
+  static const double timelineGutter = 36;
+  static const double timelineRailLeft = 9;
+  static const double timelineRailInset = 12;
+  static const double timelineRailWidth = 2;
+  static const double timelineDotSize = 12;
+  static const double timelineDotTop = 30;
+  static const double timelineBulletSize = 6;
+  static const double timelineBulletTop = 9;
+
   /// Vertical section paddings from the prototype.
   static const double projectsTop = 96;
   static const double defaultTop = 112;
@@ -120,6 +139,9 @@ abstract final class AppOpacity {
 
   /// Count next to a filter label.
   static const double filterCount = 0.6;
+
+  /// Halo start opacity of the avatar status dot.
+  static const double statusHalo = 0.55;
 }
 
 /// Design tokens: animation durations.
@@ -127,6 +149,8 @@ abstract final class AppDurations {
   static const Duration fast = Duration(milliseconds: 200);
   static const Duration medium = Duration(milliseconds: 250);
   static const Duration phoneLift = Duration(milliseconds: 350);
+  static const Duration statusPulse = Duration(milliseconds: 2000);
+  static const Duration copyFeedback = Duration(seconds: 2);
 }
 
 /// Design tokens: animation curves.

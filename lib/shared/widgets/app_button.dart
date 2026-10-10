@@ -18,6 +18,7 @@ class AppButton extends StatefulWidget {
     this.semanticLabel,
     this.isLink = false,
     this.compact = false,
+    this.labelMinWidth,
     super.key,
   }) : _kind = _ButtonKind.primary;
 
@@ -29,6 +30,7 @@ class AppButton extends StatefulWidget {
     this.semanticLabel,
     this.isLink = false,
     this.compact = false,
+    this.labelMinWidth,
     super.key,
   }) : _kind = _ButtonKind.secondary;
 
@@ -47,6 +49,10 @@ class AppButton extends StatefulWidget {
   /// narrow columns, e.g. store links in a two-column project card. The tap
   /// target height is unchanged.
   final bool compact;
+
+  /// Minimum width of the (centered) label, so a label that changes (e.g.
+  /// "Copy email" -> "Copied") does not resize the button.
+  final double? labelMinWidth;
   final _ButtonKind _kind;
 
   @override
@@ -102,7 +108,18 @@ class _AppButtonState extends State<AppButton> {
           AppIconView(widget.icon!, color: foreground),
           const SizedBox(width: AppSpacing.s8),
         ],
-        Text(widget.label, style: style),
+        // Flexible so a long label (an email address, large text scale) wraps
+        // instead of overflowing a narrow screen.
+        Flexible(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: widget.labelMinWidth ?? 0),
+            child: Text(
+              widget.label,
+              textAlign: TextAlign.center,
+              style: style,
+            ),
+          ),
+        ),
         if (widget.trailingIcon != null) ...[
           const SizedBox(width: AppSpacing.s8),
           AppIconView(widget.trailingIcon!, color: foreground),

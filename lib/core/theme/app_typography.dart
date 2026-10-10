@@ -118,6 +118,22 @@ abstract final class AppTextStyles {
     color: AppColors.cyan400,
   );
 
+  /// Role and dates in a timeline card header (the prototype's `.mono` 12px).
+  static const TextStyle timelineMeta = TextStyle(
+    fontFamily: AppFonts.mono,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 12,
+    color: AppColors.textSecondary,
+  );
+
+  /// Copyright/build line in the footer.
+  static const TextStyle footerMono = TextStyle(
+    fontFamily: AppFonts.mono,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 13,
+    color: AppColors.textSecondary,
+  );
+
   static const TextStyle tag = TextStyle(
     fontFamily: AppFonts.mono,
     fontFamilyFallback: AppFonts.fallback,

@@ -2,7 +2,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ragheb_portfolio/app/app.dart';
 import 'package:ragheb_portfolio/core/theme/app_spacing.dart';
+import 'package:ragheb_portfolio/features/shell/section_id.dart';
 import 'package:ragheb_portfolio/features/shell/widgets/site_header.dart';
+
+import '../support/app_harness.dart';
+import '../support/settle.dart';
 
 /// Regressions caught in the browser: the header nav sat mid-row and
 /// start-aligned section headers were centered as a block.
@@ -17,7 +21,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(const PortfolioApp());
-    await tester.pumpAndSettle();
+    await settle(tester);
   }
 
   testWidgets('header nav ends at the right edge of the content column', (
@@ -36,6 +40,10 @@ void main() {
     tester,
   ) async {
     await pump(tester);
+    // The taller hero (avatar) pushes the Projects header below the first
+    // viewport, where the list has not built it yet.
+    navigationOf(tester).scrollTo(SectionId.projects);
+    await settle(tester);
     final eyebrow = find.text('01 / FEATURED PROJECTS');
     expect(eyebrow, findsOneWidget);
     expect(tester.getRect(eyebrow).left, closeTo(columnLeft, 1));

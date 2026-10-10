@@ -15,7 +15,9 @@ enum AppIcon {
   board('assets/icons/board.svg'),
   chevronRight('assets/icons/chevron_right.svg'),
   arrowUpRight('assets/icons/arrow_up_right.svg'),
-  arrowRight('assets/icons/arrow_right.svg');
+  arrowRight('assets/icons/arrow_right.svg'),
+  copy('assets/icons/copy.svg'),
+  check('assets/icons/check.svg');
 
   const AppIcon(this.assetPath);
 

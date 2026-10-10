@@ -27,6 +27,8 @@ import 'package:ragheb_portfolio/features/shell/section_id.dart';
 import 'package:ragheb_portfolio/shared/widgets/tag_pill.dart';
 import 'package:url_launcher/link.dart';
 
+import '../../support/settle.dart';
+
 const repo = StaticPortfolioRepository();
 final projects = repo.featuredProjects;
 
@@ -38,10 +40,10 @@ Future<void> pumpProjects(
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(const PortfolioApp());
-  await tester.pumpAndSettle();
+  await settle(tester);
   BlocProvider.of<NavigationCubit>(tester.element(find.byType(PortfolioPage)))
       .scrollTo(SectionId.projects);
-  await tester.pumpAndSettle();
+  await settle(tester);
 }
 
 Finder card(int i) => find.byType(ProjectCard).at(i);
@@ -234,7 +236,7 @@ void main() {
           BlocProvider.of<NavigationCubit>(
             tester.element(find.byType(PortfolioPage)),
           ).scrollTo(id);
-          await tester.pumpAndSettle();
+          await settle(tester);
           expect(tester.takeException(), isNull);
         }
       });
@@ -409,7 +411,7 @@ void main() {
 
       final gesture = await mouse(tester);
       await gesture.moveTo(tester.getCenter(card(0)));
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       expect(borderColorOf(tester, 0), AppColors.cyanBorderHover);
       expect(borderColorOf(tester, 1), AppColors.borderSubtle);
@@ -419,7 +421,7 @@ void main() {
       expect(angle * 180 / math.pi, closeTo(-1, 0.01));
 
       await gesture.moveTo(const Offset(1, 1));
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(borderColorOf(tester, 0), AppColors.borderSubtle);
       t = phoneTransformOf(tester, 0).transform;
       expect(t.getTranslation().y, closeTo(0, 0.01));
@@ -435,7 +437,7 @@ void main() {
       await pumpProjects(tester);
       final gesture = await mouse(tester);
       await gesture.moveTo(tester.getCenter(card(0)));
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       expect(borderColorOf(tester, 0), AppColors.cyanBorderHover);
       final t = phoneTransformOf(tester, 0).transform;
@@ -452,13 +454,13 @@ void main() {
         matching: find.text('Play Store'),
       );
       Focus.of(tester.element(label)).requestFocus();
-      await tester.pumpAndSettle();
+      await settle(tester);
 
       expect(borderColorOf(tester, 0), AppColors.cyanBorderHover);
       expect(borderColorOf(tester, 1), AppColors.borderSubtle);
 
       FocusManager.instance.primaryFocus!.unfocus();
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(borderColorOf(tester, 0), AppColors.borderSubtle);
     });
   });

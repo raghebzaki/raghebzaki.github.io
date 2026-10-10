@@ -13,6 +13,7 @@ import 'package:ragheb_portfolio/features/ecosystem/widgets/ecosystem_filter_bar
 import 'package:ragheb_portfolio/features/shell/section_id.dart';
 
 import '../../support/app_harness.dart';
+import '../../support/settle.dart';
 
 final ecosystem = const StaticPortfolioRepository().ecosystem;
 final names = [for (final family in ecosystem.families) ...family.apps];
@@ -40,7 +41,7 @@ Finder option(String label) =>
 
 Future<void> select(WidgetTester tester, String label) async {
   await tester.tap(option(label));
-  await tester.pumpAndSettle();
+  await settle(tester);
 }
 
 void main() {
@@ -139,9 +140,9 @@ void main() {
       await pumpSection(tester, SectionId.ecosystem);
       await select(tester, 'Service Center');
       navigationOf(tester).scrollTo(SectionId.contact);
-      await tester.pumpAndSettle();
+      await settle(tester);
       navigationOf(tester).scrollTo(SectionId.ecosystem);
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(
         alphaOf(tester, 'HR ERP+ Tracking'),
         closeTo(AppColors.chipErpBorder.a * AppOpacity.chipDimmed, 0.01),
@@ -202,10 +203,10 @@ void main() {
       await pumpSection(tester, SectionId.ecosystem);
       // Focus the first option, then Tab to the second.
       Focus.of(tester.element(find.text('All'))).requestFocus();
-      await tester.pumpAndSettle();
+      await settle(tester);
       await tester.sendKeyEvent(LogicalKeyboardKey.tab);
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(
         alphaOf(tester, 'CIT'),
         closeTo(AppColors.chipScBorder.a * AppOpacity.chipDimmed, 0.01),
@@ -244,7 +245,7 @@ void main() {
         mid,
         greaterThan(AppColors.chipScBorder.a * AppOpacity.chipDimmed),
       );
-      await tester.pumpAndSettle();
+      await settle(tester);
     });
 
     testWidgets('mouse hover lifts a chip by 2px', (tester) async {
@@ -267,11 +268,11 @@ void main() {
       await mouse.addPointer(location: Offset.zero);
       addTearDown(mouse.removePointer);
       await mouse.moveTo(tester.getCenter(chip('Clubs App')));
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(lift(), -AppLayout.chipLift);
       expect(tester.getTopLeft(innerBox('Clubs App')).dy, top.dy - 2);
       await mouse.moveTo(const Offset(2, 2));
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(lift(), 0);
     });
 
@@ -295,7 +296,7 @@ void main() {
       await mouse.addPointer(location: Offset.zero);
       addTearDown(mouse.removePointer);
       await mouse.moveTo(tester.getCenter(chip('Clubs App')));
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(border(), AppColors.cyanBorderHover);
     });
   });

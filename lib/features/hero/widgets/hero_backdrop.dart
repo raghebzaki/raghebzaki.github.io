@@ -1,45 +1,8 @@
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-
 import 'package:flutter/widgets.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
-
-/// An elliptical radial gradient (CSS `radial-gradient(rx ry at cx cy, …)`).
-class HeroEllipse {
-  const HeroEllipse({
-    required this.center,
-    required this.radii,
-    required this.colors,
-    required this.stops,
-  });
-
-  final Offset center;
-
-  /// Horizontal and vertical radius (`dx` = rx, `dy` = ry).
-  final Offset radii;
-  final List<Color> colors;
-  final List<double> stops;
-
-  bool get isEmpty => radii.dx <= 0 || radii.dy <= 0;
-
-  /// Column-major 4x4 matrix `translate(cx, cy) · scale(rx, ry)`, mapping the
-  /// unit-circle gradient onto the ellipse.
-  Float64List get matrix {
-    final m = Float64List(16);
-    m[0] = radii.dx;
-    m[5] = radii.dy;
-    m[10] = 1;
-    m[12] = center.dx;
-    m[13] = center.dy;
-    m[15] = 1;
-    return m;
-  }
-
-  ui.Shader createShader() =>
-      ui.Gradient.radial(Offset.zero, 1, colors, stops, TileMode.clamp, matrix);
-}
+import '../../../shared/painters/elliptical_glow.dart';
 
 /// Pure geometry of the hero backdrop for a given size.
 class HeroBackdropSpec {
@@ -56,19 +19,19 @@ class HeroBackdropSpec {
     final h = size.height;
     const spacing = AppLayout.heroGridSpacing;
     return HeroBackdropSpec(
-      cyanGlow: HeroEllipse(
+      cyanGlow: EllipticalGlow(
         center: Offset(w / 2, 0),
         radii: Offset(0.6 * w, 0.55 * h),
         colors: const [AppColors.heroGlowCyan, AppColors.heroGlowCyanEnd],
         stops: const [0, 0.7],
       ),
-      blueGlow: HeroEllipse(
+      blueGlow: EllipticalGlow(
         center: Offset(0.85 * w, 0.2 * h),
         radii: Offset(0.4 * w, 0.4 * h),
         colors: const [AppColors.heroGlowBlue, AppColors.heroGlowBlueEnd],
         stops: const [0, 0.7],
       ),
-      gridMask: HeroEllipse(
+      gridMask: EllipticalGlow(
         center: Offset(0.5 * w, 0.25 * h),
         radii: Offset(0.7 * w, 0.7 * h),
         colors: const [AppColors.gridLine, AppColors.gridLineEnd],
@@ -85,9 +48,9 @@ class HeroBackdropSpec {
     );
   }
 
-  final HeroEllipse cyanGlow;
-  final HeroEllipse blueGlow;
-  final HeroEllipse gridMask;
+  final EllipticalGlow cyanGlow;
+  final EllipticalGlow blueGlow;
+  final EllipticalGlow gridMask;
 
   /// X positions of the vertical grid lines.
   final List<double> verticalLines;

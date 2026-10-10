@@ -14,6 +14,8 @@ import 'package:ragheb_portfolio/shared/widgets/app_button.dart';
 import 'package:ragheb_portfolio/shared/widgets/app_icon.dart';
 import 'package:url_launcher/link.dart';
 
+import '../../support/settle.dart';
+
 /// Pumps the app without settling, so animations can be observed.
 Future<void> pumpApp(
   WidgetTester tester, {
@@ -39,7 +41,7 @@ NavigationCubit cubitOf(WidgetTester tester) =>
 void main() {
   testWidgets('hero shows the copy and the four actions', (tester) async {
     await pumpApp(tester);
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     expect(find.text(profile.title), findsOneWidget);
     expect(find.text('Ragheb Zaki'), findsWidgets);
@@ -54,7 +56,7 @@ void main() {
     tester,
   ) async {
     await pumpApp(tester);
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     // Scoped to the hero: the projects section below adds store links.
     final links = tester
@@ -87,10 +89,10 @@ void main() {
 
   testWidgets('Contact scrolls to the contact section', (tester) async {
     await pumpApp(tester);
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     await tester.tap(find.widgetWithText(AppButton, 'Contact'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(cubitOf(tester).state.active, SectionId.contact);
   });
 
@@ -110,7 +112,7 @@ void main() {
       await pumpApp(tester);
       await tester.pump();
       expect(find.text('100K+'), findsNothing);
-      await tester.pumpAndSettle();
+      await settle(tester);
       for (final text in ['4+', '30+', '100K+']) {
         expect(find.text(text), findsOneWidget);
       }
@@ -137,17 +139,17 @@ void main() {
       expect(find.bySemanticsLabel('100K+ Flagship Installs'), findsOneWidget);
       expect(find.bySemanticsLabel('4+ Years Experience'), findsOneWidget);
       expect(find.bySemanticsLabel('30+ Shipped Live Apps'), findsOneWidget);
-      await tester.pumpAndSettle();
+      await settle(tester);
       handle.dispose();
     });
 
     testWidgets('do not replay after scrolling away and back', (tester) async {
       await pumpApp(tester);
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(find.text('100K+'), findsOneWidget);
 
       cubitOf(tester).scrollTo(SectionId.contact);
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(find.byType(StatsBar), findsNothing, reason: 'hero is unmounted');
 
       cubitOf(tester).scrollTo(SectionId.hero);
@@ -158,7 +160,7 @@ void main() {
       }
       // First frame after the hero rebuilt: already final.
       expect(find.text('100K+'), findsOneWidget);
-      await tester.pumpAndSettle();
+      await settle(tester);
     });
 
     for (final width in [360.0, 768.0, 1440.0]) {
@@ -166,7 +168,7 @@ void main() {
         tester,
       ) async {
         await pumpApp(tester, size: Size(width, 900));
-        await tester.pumpAndSettle();
+        await settle(tester);
         expect(tester.takeException(), isNull);
 
         final dys = [
@@ -185,7 +187,7 @@ void main() {
   group('backdrop', () {
     testWidgets('is isolated in a repaint boundary', (tester) async {
       await pumpApp(tester);
-      await tester.pumpAndSettle();
+      await settle(tester);
       final painted = find.byWidgetPredicate(
         (w) => w is CustomPaint && w.painter is HeroBackdropPainter,
       );

@@ -10,6 +10,7 @@ import 'package:ragheb_portfolio/features/skills/widgets/skills_grid.dart';
 import 'package:ragheb_portfolio/shared/widgets/glow_card.dart';
 
 import '../../support/app_harness.dart';
+import '../../support/settle.dart';
 
 final tiles = const StaticPortfolioRepository().skills;
 
@@ -247,10 +248,10 @@ void main() {
     await mouse.addPointer(location: Offset.zero);
     addTearDown(mouse.removePointer);
     await mouse.moveTo(tester.getCenter(card(0)));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(border(), isNot(before));
     await mouse.moveTo(const Offset(2, 2));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(border(), before);
   });
 }

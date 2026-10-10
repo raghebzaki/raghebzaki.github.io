@@ -1,13 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/responsive/responsive_context.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../domain/repositories/portfolio_repository.dart';
-import '../../shared/widgets/gradient_text.dart';
 import '../../shared/widgets/section_container.dart';
+import 'widgets/contact_panel.dart';
 
+/// Closing call to action plus the footer line.
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
@@ -20,26 +20,7 @@ class ContactSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Center(
-            child: HighlightedTitle(
-              lead: "Let's build your next ",
-              highlight: 'Flutter app',
-              trail: '.',
-              textAlign: TextAlign.center,
-              style: context.typography.ctaTitle,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.s24),
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: AppLayout.ctaTextMax),
-              child: Text(
-                profile.availability,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.body.copyWith(fontSize: 16),
-              ),
-            ),
-          ),
+          const ContactPanel(),
           const SizedBox(height: AppSpacing.s28),
           Wrap(
             alignment: WrapAlignment.spaceBetween,
@@ -50,7 +31,10 @@ class ContactSection extends StatelessWidget {
                 '${profile.name} · ${profile.title}',
                 style: AppTextStyles.caption,
               ),
-              Text('© ${DateTime.now().year}', style: AppTextStyles.caption),
+              Text(
+                'Built with Flutter Web · © ${DateTime.now().year}',
+                style: AppTextStyles.footerMono,
+              ),
             ],
           ),
         ],

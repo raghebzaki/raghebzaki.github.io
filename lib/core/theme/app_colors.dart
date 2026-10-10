@@ -39,6 +39,9 @@ abstract final class AppColors {
   static const Color cyan700 = Color(0xFF0E7490);
   static const Color blue600 = Color(0xFF2563EB);
 
+  // Status
+  static const Color statusGreen = Color(0xFF22C55E);
+
   // Phone mockup
   static const Color phoneBody = Color(0xFF0A0D14);
   static const Color phoneBorder = Color(0xFF30363D);
@@ -80,6 +83,9 @@ abstract final class AppColors {
   static const Color layerBlueBorder = Color(0x4D60A5FA); // .30
   static const Color flowActiveFill = Color(0x1A22D3EE); // .10
   static const Color flowActiveBorder = Color(0x6622D3EE); // .40
+  static const Color contactGlow = Color(0x1F22D3EE); // cyan .12
+  static const Color contactGlowEnd = Color(0x0022D3EE);
+  static const Color timelineBullet = Color(0xB322D3EE); // cyan400 @ .7
 }
 
 /// Design tokens: gradients.
@@ -234,6 +240,15 @@ abstract final class AppShadows {
       offset: Offset(0, 16),
       blurRadius: 32,
       spreadRadius: -12,
+    ),
+  ];
+
+  /// Soft cyan glow around the hero avatar.
+  static const List<BoxShadow> avatarGlow = [
+    BoxShadow(
+      color: Color(0x5922D3EE), // cyan400 @ .35
+      blurRadius: 40,
+      spreadRadius: -8,
     ),
   ];
 

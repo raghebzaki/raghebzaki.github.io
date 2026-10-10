@@ -2,12 +2,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ragheb_portfolio/app/app.dart';
+import 'package:ragheb_portfolio/features/hero/hero_section.dart';
 import 'package:ragheb_portfolio/features/shell/cubit/navigation_cubit.dart';
 import 'package:ragheb_portfolio/features/shell/portfolio_page.dart';
 import 'package:ragheb_portfolio/features/shell/section_id.dart';
 import 'package:ragheb_portfolio/features/shell/widgets/compact_menu.dart';
 import 'package:ragheb_portfolio/features/shell/widgets/site_header.dart';
 import 'package:ragheb_portfolio/features/timeline/timeline_section.dart';
+import 'package:ragheb_portfolio/shared/widgets/app_button.dart';
+
+import '../support/settle.dart';
 
 Future<void> pumpApp(
   WidgetTester tester, {
@@ -18,7 +22,7 @@ Future<void> pumpApp(
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(PortfolioApp(initialLocation: initialLocation));
-  await tester.pumpAndSettle();
+  await settle(tester);
 }
 
 NavigationCubit cubitOf(WidgetTester tester) =>
@@ -30,10 +34,7 @@ void main() {
   testWidgets('desktop shows inline nav and scrolls to Timeline', (
     tester,
   ) async {
-    // Height 600 (not 900): the Timeline body is still a short placeholder, so
-    // on a taller viewport it cannot reach the top and the page ends at the
-    // bottom, where the spy correctly reports Contact.
-    await pumpApp(tester, size: const Size(1440, 600));
+    await pumpApp(tester);
     // Scoped to the header: the hero also has a "Contact" button.
     Finder inHeader(String label) => find.descendant(
       of: find.byType(SiteHeader),
@@ -51,7 +52,7 @@ void main() {
     expect(find.byTooltip('Open menu'), findsNothing);
 
     await tester.tap(find.text('Timeline'));
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     final state = cubitOf(tester).state;
     expect(state.active, SectionId.timeline);
@@ -83,7 +84,7 @@ void main() {
     await pumpApp(tester, size: const Size(1440, 900));
     written.clear();
     await tester.tap(find.text('Skills'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(written, ['/skills']);
     expect(tester.takeException(), isNull);
   });
@@ -109,7 +110,7 @@ void main() {
     expect(find.byTooltip('Open menu'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Open menu'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     Finder inMenu(String label) => find.descendant(
       of: find.byType(CompactMenuPanel),
       matching: find.text(label),
@@ -125,7 +126,7 @@ void main() {
     }
 
     await tester.tap(inMenu('Contact'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text('Projects'), findsNothing);
     expect(cubitOf(tester).state.active, SectionId.contact);
     expect(cubitOf(tester).state.target, isNull);
@@ -134,11 +135,11 @@ void main() {
   testWidgets('Escape closes the open menu', (tester) async {
     await pumpApp(tester, size: const Size(390, 844));
     await tester.tap(find.byTooltip('Open menu'));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text('Projects'), findsOneWidget);
 
     await tester.sendKeyEvent(LogicalKeyboardKey.escape);
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text('Projects'), findsNothing);
   });
 
@@ -152,7 +153,7 @@ void main() {
       await pumpApp(tester);
       final before = tester.getTopLeft(find.text('Ragheb Zaki').last).dy;
       await tester.sendKeyEvent(entry.value);
-      await tester.pumpAndSettle();
+      await settle(tester);
       final after = tester.getTopLeft(find.text('Ragheb Zaki').last).dy;
       expect(after, lessThan(before));
     });
@@ -161,10 +162,10 @@ void main() {
   testWidgets('End then Home scroll to contact and hero', (tester) async {
     await pumpApp(tester);
     await tester.sendKeyEvent(LogicalKeyboardKey.end);
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(cubitOf(tester).state.active, SectionId.contact);
     await tester.sendKeyEvent(LogicalKeyboardKey.home);
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(cubitOf(tester).state.active, SectionId.hero);
   });
 
@@ -173,8 +174,36 @@ void main() {
       await pumpApp(tester, size: Size(width, 900));
       expect(tester.takeException(), isNull);
       cubitOf(tester).scrollTo(SectionId.contact);
-      await tester.pumpAndSettle();
+      await settle(tester);
       expect(tester.takeException(), isNull);
     });
   }
+
+  group('smooth-scroll anchors from the top at 1440x900', () {
+    for (final section in [SectionId.timeline, SectionId.contact]) {
+      testWidgets('scrollTo(${section.name}) settles on that section', (
+        tester,
+      ) async {
+        await pumpApp(tester);
+        cubitOf(tester).scrollTo(section);
+        await settle(tester);
+        expect(cubitOf(tester).state.active, section);
+        expect(cubitOf(tester).state.target, isNull);
+        expect(tester.takeException(), isNull);
+      });
+    }
+
+    testWidgets('the hero Contact button lands on contact', (tester) async {
+      await pumpApp(tester);
+      await tester.tap(
+        find.descendant(
+          of: find.byType(HeroSection),
+          matching: find.widgetWithText(AppButton, 'Contact'),
+        ),
+      );
+      await settle(tester);
+      expect(cubitOf(tester).state.active, SectionId.contact);
+      expect(cubitOf(tester).state.target, isNull);
+    });
+  });
 }

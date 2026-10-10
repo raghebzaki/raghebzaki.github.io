@@ -18,8 +18,8 @@ class CtaRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profile = context.read<PortfolioRepository>().profile;
-    final github = _social(profile, SocialType.github);
-    final linkedin = _social(profile, SocialType.linkedin);
+    final github = profile.socialOf(SocialType.github);
+    final linkedin = profile.socialOf(SocialType.linkedin);
 
     return Wrap(
       spacing: AppLayout.ctaGap,
@@ -46,13 +46,6 @@ class CtaRow extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  static SocialLink? _social(Profile profile, SocialType type) {
-    for (final social in profile.socials) {
-      if (social.type == type) return social;
-    }
-    return null;
   }
 
   static Widget _socialButton(SocialLink social, AppIcon icon) => Link(
