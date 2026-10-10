@@ -30,7 +30,8 @@ class StoreLink extends Equatable {
   List<Object?> get props => [store, url];
 }
 
-enum ProjectMockup { storefront, erpModules, posRegister, memberPortal }
+/// What the app is about; presentation maps it to an app-icon glyph.
+enum ProjectGlyph { cart, modules, register, members }
 
 enum AccentTone { cyan, blue }
 
@@ -40,12 +41,11 @@ class Project extends Equatable {
     required this.name,
     this.nativeName,
     required this.badge,
-    required this.summary,
     required this.description,
-    required this.tags,
+    required this.stack,
     required this.platforms,
     required this.links,
-    required this.mockup,
+    required this.glyph,
     required this.accent,
   });
 
@@ -53,12 +53,13 @@ class Project extends Equatable {
   final String name;
   final String? nativeName;
   final String badge;
-  final String summary;
   final String description;
-  final List<String> tags;
+
+  /// Feature/tech pills shown on the card.
+  final List<String> stack;
   final Set<AppPlatform> platforms;
   final List<StoreLink> links;
-  final ProjectMockup mockup;
+  final ProjectGlyph glyph;
   final AccentTone accent;
 
   @override

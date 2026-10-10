@@ -1,4 +1,3 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/painting.dart';
 
 /// Design tokens: spacing scale.
@@ -31,8 +30,7 @@ abstract final class AppRadii {
   static const double segmentGroup = 14;
   static const double card = 20;
   static const double panel = 24;
-  static const double phoneOuter = 38;
-  static const double phoneInner = 30;
+  static const double appIcon = 14;
   static const double brand = 9;
 
   static const BorderRadius brandBorder = BorderRadius.all(
@@ -56,11 +54,8 @@ abstract final class AppRadii {
   static const BorderRadius panelBorder = BorderRadius.all(
     Radius.circular(panel),
   );
-  static const BorderRadius phoneOuterBorder = BorderRadius.all(
-    Radius.circular(phoneOuter),
-  );
-  static const BorderRadius phoneInnerBorder = BorderRadius.all(
-    Radius.circular(phoneInner),
+  static const BorderRadius appIconBorder = BorderRadius.all(
+    Radius.circular(appIcon),
   );
 }
 
@@ -80,17 +75,11 @@ abstract final class AppLayout {
   /// Featured projects grid.
   static const double projectMinTile = 540;
   static const double cardPadding = 28;
-  static const double cardInfoMin = 220;
 
-  /// Phone mockup (outer box, border-box).
-  static const double phoneWidth = 208;
-  static const double phoneHeight = 424;
-  static const double phoneInset = 8;
-  static const double phoneLift = 6;
-  static const double phoneLiftAngle = -0.01745329251994; // -1deg in rad
-  static const double notchWidth = 60;
-  static const double notchHeight = 17;
-  static const double notchTop = 9;
+  /// Project card: header width from which the badge sits beside the title.
+  static const double projectBadgeBeside = 420;
+  static const double appIconBadgeSize = 56;
+  static const double appIconGlyphSize = 26;
 
   /// Ecosystem card.
   static const double ecosystemHeaderMax = 560;
@@ -99,6 +88,8 @@ abstract final class AppLayout {
   static const double ecosystemGlowRight = -80;
   static const double chipMinHeight = 36;
   static const double chipLift = 2;
+  static const double showcaseMinTile = 260;
+  static const double showcaseGap = 12;
 
   /// Skills grid.
   static const double skillMinTile = 380;
@@ -148,12 +139,6 @@ abstract final class AppOpacity {
 abstract final class AppDurations {
   static const Duration fast = Duration(milliseconds: 200);
   static const Duration medium = Duration(milliseconds: 250);
-  static const Duration phoneLift = Duration(milliseconds: 350);
   static const Duration statusPulse = Duration(milliseconds: 2000);
   static const Duration copyFeedback = Duration(seconds: 2);
-}
-
-/// Design tokens: animation curves.
-abstract final class AppCurves {
-  static const Cubic phoneLift = Cubic(0.2, 0.8, 0.2, 1);
 }

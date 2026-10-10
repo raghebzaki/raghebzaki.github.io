@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+/// A phone number as written, without spaces: `+20 128 9` -> `+201289`.
+String dialable(String phone) => phone.replaceAll(RegExp(r'\s+'), '');
+
 class Stat extends Equatable {
   const Stat({required this.value, required this.suffix, required this.label});
 
@@ -38,6 +41,8 @@ class Profile extends Equatable {
     required this.title,
     required this.summary,
     required this.email,
+    required this.phones,
+    required this.whatsappPhone,
     required this.location,
     required this.availability,
     required this.resumePath,
@@ -53,6 +58,12 @@ class Profile extends Equatable {
   final String title;
   final String summary;
   final String email;
+
+  /// Phone numbers as written (shown and called via `tel:`).
+  final List<String> phones;
+
+  /// The number reachable on WhatsApp (also copied by "Copy phone").
+  final String whatsappPhone;
   final String location;
   final String availability;
 
@@ -85,6 +96,8 @@ class Profile extends Equatable {
     title,
     summary,
     email,
+    phones,
+    whatsappPhone,
     location,
     availability,
     resumePath,

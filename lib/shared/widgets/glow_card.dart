@@ -8,7 +8,7 @@ import '../../core/theme/app_spacing.dart';
 ///
 /// The border is painted over the box (foreground) so it takes no layout
 /// space. [builder] receives whether the card is currently highlighted, so
-/// content can react (e.g. lift a phone).
+/// content can react (e.g. tint an icon).
 class GlowCard extends StatefulWidget {
   const GlowCard({
     required this.builder,

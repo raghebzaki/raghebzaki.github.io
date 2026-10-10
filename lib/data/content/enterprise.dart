@@ -1,4 +1,5 @@
 import '../../domain/entities/ecosystem.dart';
+import '../../domain/entities/project.dart';
 
 const ecosystem = Ecosystem(
   totalLabel: '32+',
@@ -53,4 +54,59 @@ const ecosystem = Ecosystem(
       ],
     ),
   ],
+  publisherLinks: [
+    StoreLink(
+      store: StoreType.appStore,
+      url:
+          'https://apps.apple.com/eg/developer/com-cloudsoft5-erp/id1422490126',
+    ),
+    StoreLink(
+      store: StoreType.playStore,
+      url:
+          'https://play.google.com/store/apps/dev?id=6416475393253964776&hl=ar',
+    ),
+    StoreLink(
+      store: StoreType.appGallery,
+      url: 'https://appgallery.huawei.com/tab/appdetailCommon%7CC115490003%7Cautomore%7Cdoublecolumncardwithstar%7C903547',
+    ),
+  ],
+  moreApps: AppShowcase(
+    title: 'Also shipped at Coddiv',
+    subtitle: 'Client apps live on the stores.',
+    apps: [
+      ShowcaseApp(
+        name: 'Holy Karbala Real Estate',
+        nativeName: 'عقارات كربلاء المقدسة',
+        links: [
+          StoreLink(
+            store: StoreType.playStore,
+            url: 'https://play.google.com/store/apps/details?id=com.coddiv.karballa',
+          ),
+          StoreLink(
+            store: StoreType.appStore,
+            url: 'https://apps.apple.com/us/app/%D8%B9%D9%82%D8%A7%D8%B1%D8%A7%D8%AA-%D9%83%D8%B1%D8%A8%D9%84%D8%A7%D8%A1-%D8%A7%D9%84%D9%85%D9%82%D8%AF%D8%B3%D8%A9/id6742713156',
+          ),
+        ],
+      ),
+      ShowcaseApp(
+        name: 'Prime Car Rental',
+        nativeName: 'برايم ـ لتأجير السيارات',
+        links: [
+          StoreLink(
+            store: StoreType.playStore,
+            url: 'https://play.google.com/store/apps/details?id=com.coddiv.prime',
+          ),
+        ],
+      ),
+      ShowcaseApp(
+        name: 'MTA Logistics',
+        links: [
+          StoreLink(
+            store: StoreType.playStore,
+            url: 'https://play.google.com/store/apps/details?id=com.coddiv.shipping_express',
+          ),
+        ],
+      ),
+    ],
+  ),
 );

@@ -7,10 +7,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ragheb_portfolio/core/theme/app_colors.dart';
 import 'package:ragheb_portfolio/core/theme/app_spacing.dart';
 import 'package:ragheb_portfolio/data/static_portfolio_repository.dart';
+import 'package:ragheb_portfolio/domain/entities/project.dart';
 import 'package:ragheb_portfolio/features/ecosystem/widgets/app_chip.dart';
 import 'package:ragheb_portfolio/features/ecosystem/widgets/app_chip_cloud.dart';
 import 'package:ragheb_portfolio/features/ecosystem/widgets/ecosystem_filter_bar.dart';
+import 'package:ragheb_portfolio/features/ecosystem/widgets/more_apps.dart';
+import 'package:ragheb_portfolio/features/ecosystem/widgets/publisher_links.dart';
 import 'package:ragheb_portfolio/features/shell/section_id.dart';
+import 'package:url_launcher/link.dart';
 
 import '../../support/app_harness.dart';
 import '../../support/settle.dart';
@@ -45,6 +49,33 @@ Future<void> select(WidgetTester tester, String label) async {
 }
 
 void main() {
+  // Regression (seen in the browser): the corner glow was clipped by its
+  // Stack into a hard-edged rectangle at the padded content box, and offset by
+  // the padding. It must sit at top -120 / right -80 of the card itself.
+  testWidgets('corner glow is positioned against the card edge, unclipped', (
+    tester,
+  ) async {
+    await pumpSection(tester, SectionId.ecosystem);
+    final glow = find.byWidgetPredicate(
+      (w) =>
+          w is DecoratedBox &&
+          w.decoration is BoxDecoration &&
+          (w.decoration as BoxDecoration).gradient ==
+              AppGradients.ecosystemGlow,
+    );
+    expect(glow, findsOneWidget);
+    final stack = tester.widget<Stack>(
+      find.ancestor(of: glow, matching: find.byType(Stack)).first,
+    );
+    expect(stack.clipBehavior, Clip.none);
+    final card = tester.getRect(
+      find.ancestor(of: glow, matching: find.byType(AnimatedContainer)).first,
+    );
+    final rect = tester.getRect(glow);
+    expect(rect.top, closeTo(card.top + AppLayout.ecosystemGlowTop, 1));
+    expect(rect.right, closeTo(card.right - AppLayout.ecosystemGlowRight, 1));
+  });
+
   setUpAll(loadAppFonts);
 
   group('content', () {
@@ -301,6 +332,115 @@ void main() {
     });
   });
 
+  group('publisher links', () {
+    testWidgets('three CloudSoft5 store buttons open in a new tab', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await pumpSection(tester, SectionId.ecosystem);
+      final links = tester
+          .widgetList<Link>(
+            find.descendant(
+              of: find.byType(PublisherLinks),
+              matching: find.byType(Link),
+            ),
+          )
+          .toList();
+      expect(links.map((l) => l.uri), [
+        for (final l in ecosystem.publisherLinks) Uri.parse(l.url),
+      ]);
+      expect(links.map((l) => l.target), everyElement(LinkTarget.blank));
+      expect(find.text(PublisherLinks.caption), findsOneWidget);
+      for (final label in ['App Store', 'Google Play', 'AppGallery']) {
+        expect(
+          find.descendant(
+            of: find.byType(PublisherLinks),
+            matching: find.text(label),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.bySemanticsLabel('CloudSoft5 apps on $label'),
+          findsOneWidget,
+        );
+      }
+      handle.dispose();
+    });
+
+    test('labels', () {
+      expect(publisherStoreLabel(StoreType.appStore), 'App Store');
+      expect(publisherStoreLabel(StoreType.playStore), 'Google Play');
+      expect(publisherStoreLabel(StoreType.appGallery), 'AppGallery');
+      expect(publisherStoreLabel(StoreType.windows), 'Windows');
+    });
+  });
+
+  group('more apps', () {
+    final apps = ecosystem.moreApps.apps;
+    Finder tile(int i) => find.byType(ShowcaseAppTile).at(i);
+
+    test('showcaseColumns', () {
+      expect(showcaseColumns(260), 1);
+      expect(showcaseColumns(532), 2);
+      expect(showcaseColumns(804), 3);
+      expect(showcaseColumns(3000), 3);
+    });
+
+    testWidgets('1440: three tiles in one row, equal height, with links', (
+      tester,
+    ) async {
+      await pumpSection(tester, SectionId.ecosystem);
+      expect(find.text(ecosystem.moreApps.title), findsOneWidget);
+      expect(find.text(ecosystem.moreApps.subtitle), findsOneWidget);
+      expect(find.byType(ShowcaseAppTile), findsNWidgets(3));
+      for (var i = 0; i < 3; i++) {
+        final inTile = find.descendant(
+          of: tile(i),
+          matching: find.text(apps[i].name),
+        );
+        expect(inTile, findsOneWidget);
+        if (apps[i].nativeName != null) {
+          final native = tester.widget<Text>(
+            find.descendant(
+              of: tile(i),
+              matching: find.text(apps[i].nativeName!),
+            ),
+          );
+          expect(native.textDirection, TextDirection.rtl);
+        }
+        final links = tester
+            .widgetList<Link>(
+              find.descendant(of: tile(i), matching: find.byType(Link)),
+            )
+            .toList();
+        expect(links.length, [2, 1, 1][i]);
+        expect(links.map((l) => l.uri), [
+          for (final l in apps[i].links) Uri.parse(l.url),
+        ]);
+        expect(links.map((l) => l.target), everyElement(LinkTarget.blank));
+      }
+      final rects = [for (var i = 0; i < 3; i++) tester.getRect(tile(i))];
+      expect(rects[1].top, rects[0].top);
+      expect(rects[2].top, rects[0].top);
+      expect(rects[1].height, closeTo(rects[0].height, 0.5));
+      expect(rects[2].height, closeTo(rects[0].height, 0.5));
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('390: tiles are stacked', (tester) async {
+      await pumpSection(
+        tester,
+        SectionId.ecosystem,
+        size: const Size(390, 800),
+      );
+      final rects = [for (var i = 0; i < 3; i++) tester.getRect(tile(i))];
+      expect(rects[1].top, greaterThanOrEqualTo(rects[0].bottom));
+      expect(rects[2].top, greaterThanOrEqualTo(rects[1].bottom));
+      expect(rects[1].left, rects[0].left);
+      expect(tester.takeException(), isNull);
+    });
+  });
+
   group('header layout', () {
     testWidgets('1440: title block and filter share a row, bottoms aligned', (
       tester,
@@ -308,8 +448,10 @@ void main() {
       await pumpSection(tester, SectionId.ecosystem);
       final summary = tester.getRect(find.text(ecosystem.summary));
       final bar = tester.getRect(find.byType(EcosystemFilterBar));
+      final links = tester.getRect(find.byType(PublisherLinks));
       expect(bar.left, greaterThan(summary.right));
-      expect(bar.bottom, closeTo(summary.bottom, 1));
+      expect(links.top, greaterThanOrEqualTo(summary.bottom));
+      expect(bar.bottom, closeTo(links.bottom, 1));
     });
 
     testWidgets('768: the filter sits below the title block', (tester) async {
@@ -320,7 +462,9 @@ void main() {
       );
       final summary = tester.getRect(find.text(ecosystem.summary));
       final bar = tester.getRect(find.byType(EcosystemFilterBar));
-      expect(bar.top, greaterThanOrEqualTo(summary.bottom));
+      final links = tester.getRect(find.byType(PublisherLinks));
+      expect(links.top, greaterThanOrEqualTo(summary.bottom));
+      expect(bar.top, greaterThanOrEqualTo(links.bottom));
     });
   });
 

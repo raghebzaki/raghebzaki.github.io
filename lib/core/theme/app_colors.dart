@@ -36,31 +36,19 @@ abstract final class AppColors {
   static const Color blue400 = Color(0xFF60A5FA);
   static const Color blue300 = Color(0xFF93C5FD);
   static const Color blue700 = Color(0xFF1D4ED8);
-  static const Color cyan700 = Color(0xFF0E7490);
-  static const Color blue600 = Color(0xFF2563EB);
 
   // Status
   static const Color statusGreen = Color(0xFF22C55E);
 
-  // Phone mockup
-  static const Color phoneBody = Color(0xFF0A0D14);
-  static const Color phoneBorder = Color(0xFF30363D);
-  static const Color phoneScreen = Color(0xFF0F1623);
-  static const Color phoneTile = Color(0xFF161E2B);
-  static const Color phoneInput = Color(0xFF1A2230);
+  // Misc fills
+  static const Color avatarFill = Color(0xFF161E2B);
   static const Color skeleton = Color(0xFF232B38);
-  static const Color phoneImageStart = Color(0xFF1E2A3D);
-  static const Color phoneImageEnd = Color(0xFF14202F);
-  static const Color phoneSelectedStart = Color(0xFF164E63);
-  static const Color phoneSelectedEnd = Color(0xFF0C2A3A);
-  static const Color phoneSelectedRing = Color(0x9922D3EE); // cyan .6
-  static const Color phoneNotch = Color(0xFF000000);
-  static const Color mockTintCyan = Color(0x2622D3EE); // cyan .15
-  static const Color mockTintBlue = Color(0x2E3B82F6); // blue .18
-  static const Color white85 = Color(0xD9FFFFFF);
-  static const Color white88 = Color(0xE0FFFFFF);
-  static const Color white75 = Color(0xBFFFFFFF);
-  static const Color white45 = Color(0x73FFFFFF);
+
+  // App-icon badge fills (accent @ .22 -> other accent)
+  static const Color appIconCyanStart = Color(0x3822D3EE); // cyan400 .22
+  static const Color appIconCyanEnd = Color(0x243B82F6); // blue500 .14
+  static const Color appIconBlueStart = Color(0x383B82F6); // blue500 .22
+  static const Color appIconBlueEnd = Color(0x1A22D3EE); // cyan400 .10
 
   // Derived glows and tints
   static const Color gridLine = Color(0x0D94A3B8); // rgba(148,163,184,.05)
@@ -108,10 +96,12 @@ abstract final class AppGradients {
     colors: [AppColors.cyan400, AppColors.blue500],
   );
 
-  static const LinearGradient phoneImageSelected = LinearGradient(
-    begin: Alignment(-0.34, -0.94),
-    end: Alignment(0.34, 0.94),
-    colors: [AppColors.phoneSelectedStart, AppColors.phoneSelectedEnd],
+  /// App-icon badge fills (CSS 135deg).
+  static const CssLinearGradient appIconCyan = CssLinearGradient(
+    colors: [AppColors.appIconCyanStart, AppColors.appIconCyanEnd],
+  );
+  static const CssLinearGradient appIconBlue = CssLinearGradient(
+    colors: [AppColors.appIconBlueStart, AppColors.appIconBlueEnd],
   );
 
   static const LinearGradient primaryHover = LinearGradient(
@@ -146,25 +136,6 @@ abstract final class AppGradients {
     colors: [AppColors.surface, AppColors.surfaceGradientEnd],
   );
 
-  static const LinearGradient banner = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [AppColors.cyan700, AppColors.blue600],
-  );
-
-  static const LinearGradient memberCard = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [AppColors.cyan700, AppColors.blue700],
-  );
-
-  /// CSS 160deg: mostly top-to-bottom, leaning slightly to the right.
-  static const LinearGradient phoneImage = LinearGradient(
-    begin: Alignment(-0.34, -0.94),
-    end: Alignment(0.34, 0.94),
-    colors: [AppColors.phoneImageStart, AppColors.phoneImageEnd],
-  );
-
   static const LinearGradient timelineRail = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -195,36 +166,6 @@ abstract final class AppShadows {
       offset: Offset(0, 24),
       blurRadius: 64,
       spreadRadius: -32,
-    ),
-  ];
-
-  static const List<BoxShadow> phoneCyan = [
-    BoxShadow(
-      color: Color(0xE6000000), // black .9
-      offset: Offset(0, 30),
-      blurRadius: 60,
-      spreadRadius: -24,
-    ),
-    BoxShadow(
-      color: Color(0x8022D3EE), // cyan .5
-      offset: Offset(0, 30),
-      blurRadius: 90,
-      spreadRadius: -34,
-    ),
-  ];
-
-  static const List<BoxShadow> phoneBlue = [
-    BoxShadow(
-      color: Color(0xE6000000),
-      offset: Offset(0, 30),
-      blurRadius: 60,
-      spreadRadius: -24,
-    ),
-    BoxShadow(
-      color: Color(0x803B82F6), // blue500 .5
-      offset: Offset(0, 30),
-      blurRadius: 90,
-      spreadRadius: -34,
     ),
   ];
 

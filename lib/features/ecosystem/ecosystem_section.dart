@@ -14,6 +14,8 @@ import '../../shared/widgets/section_container.dart';
 import '../shell/section_id.dart';
 import 'widgets/app_chip_cloud.dart';
 import 'widgets/ecosystem_filter_bar.dart';
+import 'widgets/more_apps.dart';
+import 'widgets/publisher_links.dart';
 
 const _cardPadding = FluidValue(24, 48, 0.04);
 
@@ -29,14 +31,19 @@ class EcosystemSection extends StatelessWidget {
       child: GlowCard(
         clip: true,
         padding: EdgeInsets.all(padding),
+        // The glow is placed relative to the card edge (as in the prototype),
+        // so its offsets subtract the padding; the Stack must not clip, or the
+        // circle is cut into a hard-edged rectangle at the content box. The
+        // card's own rounded clip trims it instead.
         builder: (context, _) => Stack(
+          clipBehavior: Clip.none,
           children: [
-            const Positioned(
-              top: AppLayout.ecosystemGlowTop,
-              right: AppLayout.ecosystemGlowRight,
+            Positioned(
+              top: AppLayout.ecosystemGlowTop - padding,
+              right: AppLayout.ecosystemGlowRight - padding,
               width: AppLayout.ecosystemGlowSize,
               height: AppLayout.ecosystemGlowSize,
-              child: IgnorePointer(
+              child: const IgnorePointer(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -51,6 +58,7 @@ class EcosystemSection extends StatelessWidget {
                 _Header(ecosystem: ecosystem),
                 const SizedBox(height: AppSpacing.s32),
                 AppChipCloud(ecosystem: ecosystem),
+                MoreApps(showcase: ecosystem.moreApps),
               ],
             ),
           ],
@@ -95,6 +103,8 @@ class _Header extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.s12),
               Text(ecosystem.summary, style: AppTextStyles.body),
+              const SizedBox(height: AppSpacing.s16),
+              PublisherLinks(links: ecosystem.publisherLinks),
             ],
           ),
         ),

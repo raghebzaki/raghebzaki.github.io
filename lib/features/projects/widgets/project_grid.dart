@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../../../core/responsive/responsive_value.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../domain/entities/project.dart';
+import '../../../shared/widgets/equal_height_row.dart';
 import 'project_card.dart';
 
 /// Columns for the projects grid: 1 or 2, mirroring
@@ -25,31 +26,32 @@ class ProjectGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final columns = projectColumns(constraints.maxWidth);
-        final rows = <Widget>[];
-        for (var start = 0; start < projects.length; start += columns) {
-          final cells = <Widget>[];
-          for (var c = 0; c < columns; c++) {
-            final index = start + c;
-            if (c > 0) cells.add(const SizedBox(width: AppLayout.gridGap));
-            cells.add(
-              Expanded(
-                child: index < projects.length
-                    ? ProjectCard(
-                        project: projects[index],
-                        flagship: index == 0,
-                      )
-                    : const SizedBox.shrink(),
-              ),
-            );
-          }
-          if (rows.isNotEmpty) {
-            rows.add(const SizedBox(height: AppLayout.gridGap));
-          }
-          rows.add(
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: cells),
+        Widget cardAt(int index) =>
+            ProjectCard(project: projects[index], flagship: index == 0);
+        if (columns == 1) {
+          return Column(
+            spacing: AppLayout.gridGap,
+            children: [
+              for (var i = 0; i < projects.length; i++)
+                SizedBox(width: double.infinity, child: cardAt(i)),
+            ],
           );
         }
-        return Column(children: rows);
+        return Column(
+          spacing: AppLayout.gridGap,
+          children: [
+            for (var start = 0; start < projects.length; start += columns)
+              EqualHeightRow(
+                gap: AppLayout.gridGap,
+                children: [
+                  for (var c = 0; c < columns; c++)
+                    start + c < projects.length
+                        ? cardAt(start + c)
+                        : const SizedBox.shrink(),
+                ],
+              ),
+          ],
+        );
       },
     );
   }

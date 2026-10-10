@@ -73,11 +73,83 @@ void main() {
     expect(p.links.map((l) => l.store), isNot(contains(StoreType.appGallery)));
   });
 
-  test('CFI tags contain Android and iOS', () {
+  test('CFI platforms are Android and iOS', () {
     final p = repo.featuredProjects.firstWhere(
       (p) => p.id == 'cfi-service-center',
     );
-    expect(p.tags, containsAll(['Android', 'iOS']));
+    expect(p.platforms, {AppPlatform.android, AppPlatform.ios});
+  });
+
+  test('more apps: exact names, native names and store links', () {
+    final apps = repo.ecosystem.moreApps.apps;
+    expect(repo.ecosystem.moreApps.title, 'Also shipped at Coddiv');
+    expect(apps.map((a) => a.name), [
+      'Holy Karbala Real Estate',
+      'Prime Car Rental',
+      'MTA Logistics',
+    ]);
+    expect(apps.map((a) => a.nativeName), [
+      'عقارات كربلاء المقدسة',
+      'برايم ـ لتأجير السيارات',
+      null,
+    ]);
+    expect(apps[0].links.map((l) => l.url), [
+      'https://play.google.com/store/apps/details?id=com.coddiv.karballa',
+      'https://apps.apple.com/us/app/%D8%B9%D9%82%D8%A7%D8%B1%D8%A7%D8%AA-%D9%83%D8%B1%D8%A8%D9%84%D8%A7%D8%A1-%D8%A7%D9%84%D9%85%D9%82%D8%AF%D8%B3%D8%A9/id6742713156',
+    ]);
+    expect(apps[1].links.map((l) => l.url), [
+      'https://play.google.com/store/apps/details?id=com.coddiv.prime',
+    ]);
+    expect(apps[2].links.map((l) => l.url), [
+      'https://play.google.com/store/apps/details?id=com.coddiv.shipping_express',
+    ]);
+  });
+
+  test('no Marsa anywhere in ecosystem content', () {
+    final eco = repo.ecosystem;
+    final names = [
+      for (final f in eco.families) ...f.apps,
+      for (final a in eco.moreApps.apps) a.name,
+      eco.summary,
+      eco.moreApps.title,
+      eco.moreApps.subtitle,
+    ];
+    for (final name in names) {
+      expect(name.toLowerCase(), isNot(contains('marsa')), reason: name);
+    }
+  });
+
+  test('publisher links are the three CloudSoft5 developer pages', () {
+    final links = repo.ecosystem.publisherLinks;
+    expect(links.map((l) => l.store), [
+      StoreType.appStore,
+      StoreType.playStore,
+      StoreType.appGallery,
+    ]);
+    expect(links.map((l) => l.url), [
+      'https://apps.apple.com/eg/developer/com-cloudsoft5-erp/id1422490126',
+      'https://play.google.com/store/apps/dev?id=6416475393253964776&hl=ar',
+      'https://appgallery.huawei.com/tab/appdetailCommon%7CC115490003%7Cautomore%7Cdoublecolumncardwithstar%7C903547',
+    ]);
+    expect(links.map((l) => Uri.parse(l.url).host), [
+      'apps.apple.com',
+      'play.google.com',
+      'appgallery.huawei.com',
+    ]);
+  });
+
+  test('family counts are unchanged', () {
+    final eco = repo.ecosystem;
+    expect(eco.totalLabel, '32+');
+    expect(eco.families.map((f) => f.countLabel), ['22+', '10+']);
+    expect(eco.families.map((f) => f.apps.length), [24, 10]);
+  });
+
+  test('phones and dialable', () {
+    expect(repo.profile.phones, ['+20 1289181425', '+20 1097307097']);
+    expect(repo.profile.whatsappPhone, '+20 1289181425');
+    expect(dialable('+20 1289181425'), '+201289181425');
+    expect(dialable('+20 1097307097'), '+201097307097');
   });
 
   test('email is well-formed', () {

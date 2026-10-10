@@ -13,7 +13,8 @@ import '../../../shared/painters/elliptical_glow.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_icon.dart';
 import '../../../shared/widgets/gradient_text.dart';
-import 'copy_email_button.dart';
+import 'copy_value_button.dart';
+import 'phone_links.dart';
 
 /// The closing call-to-action panel.
 class ContactPanel extends StatelessWidget {
@@ -95,12 +96,38 @@ class ContactPanel extends StatelessWidget {
                           semanticLabel: 'Email ${profile.email}',
                         ),
                       ),
-                      CopyEmailButton(email: profile.email),
+                      CopyValueButton(
+                        value: profile.email,
+                        idleLabel: 'Copy email',
+                        announcement: 'Email address copied',
+                      ),
+                      Link(
+                        uri: Uri.https(
+                          'wa.me',
+                          dialable(profile.whatsappPhone).replaceFirst('+', ''),
+                        ),
+                        target: LinkTarget.blank,
+                        builder: (context, follow) => AppButton.secondary(
+                          label: 'WhatsApp',
+                          icon: AppIcon.message,
+                          onPressed: follow,
+                          isLink: true,
+                          semanticLabel: 'WhatsApp ${profile.whatsappPhone}',
+                        ),
+                      ),
+                      CopyValueButton(
+                        value: profile.whatsappPhone,
+                        idleLabel: 'Copy phone',
+                        icon: AppIcon.phone,
+                        announcement: 'Phone number copied',
+                      ),
                       if (github != null) _socialButton(github, AppIcon.github),
                       if (linkedin != null)
                         _socialButton(linkedin, AppIcon.linkedin),
                     ],
                   ),
+                  const SizedBox(height: AppSpacing.s16),
+                  PhoneLinks(phones: profile.phones),
                 ],
               ),
             ),

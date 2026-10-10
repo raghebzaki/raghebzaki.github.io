@@ -100,7 +100,7 @@ class _AvatarPhoto extends StatelessWidget {
   Widget build(BuildContext context) {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
     return ColoredBox(
-      color: AppColors.phoneTile,
+      color: AppColors.avatarFill,
       child: Image.asset(
         profile.avatarAsset,
         width: AppLayout.avatarPhoto,

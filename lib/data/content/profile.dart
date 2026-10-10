@@ -6,6 +6,8 @@ const profile = Profile(
   title: 'Senior Flutter Developer',
   summary: '4+ years engineering scalable mobile & cross-platform apps across Enterprise ERP, Retail POS, E-Commerce, and Real-time solutions.',
   email: 'zakiragheb32@gmail.com',
+  phones: ['+20 1289181425', '+20 1097307097'],
+  whatsappPhone: '+20 1289181425',
   location: 'Cairo, Egypt',
   availability: 'Open to senior Flutter roles and product collaborations.',
   resumePath: 'files/Ragheb_Zaki_CV.pdf',

@@ -114,6 +114,8 @@ void main() {
       title: profile.title,
       summary: profile.summary,
       email: profile.email,
+      phones: profile.phones,
+      whatsappPhone: profile.whatsappPhone,
       location: profile.location,
       availability: profile.availability,
       resumePath: profile.resumePath,

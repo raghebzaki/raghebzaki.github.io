@@ -8,16 +8,15 @@ enum AppIcon {
   linkedin('assets/icons/linkedin.svg'),
   mail('assets/icons/mail.svg'),
   cart('assets/icons/cart.svg'),
-  search('assets/icons/search.svg'),
   users('assets/icons/users.svg'),
   message('assets/icons/message.svg'),
   ledger('assets/icons/ledger.svg'),
   board('assets/icons/board.svg'),
-  chevronRight('assets/icons/chevron_right.svg'),
   arrowUpRight('assets/icons/arrow_up_right.svg'),
   arrowRight('assets/icons/arrow_right.svg'),
   copy('assets/icons/copy.svg'),
-  check('assets/icons/check.svg');
+  check('assets/icons/check.svg'),
+  phone('assets/icons/phone.svg');
 
   const AppIcon(this.assetPath);
 

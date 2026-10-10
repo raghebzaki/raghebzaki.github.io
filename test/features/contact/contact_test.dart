@@ -105,6 +105,87 @@ void main() {
     expect(linkedin.target, LinkTarget.blank);
   });
 
+  testWidgets('WhatsApp opens wa.me in a new tab', (tester) async {
+    final handle = tester.ensureSemantics();
+    await pumpSection(tester, SectionId.contact);
+    final whatsapp = linkAround(tester, button('WhatsApp'));
+    expect(whatsapp.uri, Uri.parse('https://wa.me/201289181425'));
+    expect(whatsapp.target, LinkTarget.blank);
+    expect(find.bySemanticsLabel('WhatsApp +20 1289181425'), findsOneWidget);
+    handle.dispose();
+  });
+
+  testWidgets('button order: email, copy, WhatsApp, copy phone, socials', (
+    tester,
+  ) async {
+    await pumpSection(tester, SectionId.contact, size: const Size(2000, 900));
+    final labels = [
+      profile.email,
+      'Copy email',
+      'WhatsApp',
+      'Copy phone',
+      'GitHub',
+      'LinkedIn',
+    ];
+    final lefts = [for (final l in labels) tester.getTopLeft(button(l)).dx];
+    expect(lefts, [...lefts]..sort());
+  });
+
+  testWidgets('every phone is a tel: link with a call label', (tester) async {
+    final handle = tester.ensureSemantics();
+    await pumpSection(tester, SectionId.contact);
+    final tel = tester
+        .widgetList<Link>(
+          find.descendant(of: inContact, matching: find.byType(Link)),
+        )
+        .where((l) => l.uri?.scheme == 'tel')
+        .toList();
+    expect(tel.map((l) => l.uri.toString()), [
+      'tel:+201289181425',
+      'tel:+201097307097',
+    ]);
+    for (final phone in profile.phones) {
+      expect(find.text(phone), findsOneWidget);
+      expect(find.bySemanticsLabel('Call $phone'), findsOneWidget);
+      expect(tester.getSize(find.text(phone)).height, lessThan(44));
+    }
+    handle.dispose();
+  });
+
+  testWidgets('Copy phone copies the WhatsApp number and confirms for 2s', (
+    tester,
+  ) async {
+    final copied = <String>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async {
+        if (call.method == 'Clipboard.setData') {
+          copied.add((call.arguments as Map)['text'] as String);
+        }
+        return null;
+      },
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        null,
+      ),
+    );
+    await pumpSection(tester, SectionId.contact);
+    final idleWidth = tester.getSize(button('Copy phone')).width;
+    await tester.tap(button('Copy phone'));
+    await tester.pump();
+    await tester.pump();
+    expect(copied, ['+20 1289181425']);
+    expect(button('Copied'), findsOneWidget);
+    expect(tester.getSize(button('Copied')).width, idleWidth);
+    await tester.pump(const Duration(seconds: 1));
+    expect(button('Copied'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 1));
+    expect(button('Copy phone'), findsOneWidget);
+    expect(button('Copied'), findsNothing);
+  });
+
   testWidgets('email button exposes a descriptive link label', (tester) async {
     final handle = tester.ensureSemantics();
     await pumpSection(tester, SectionId.contact);

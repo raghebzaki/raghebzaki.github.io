@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/link.dart';
 
-import '../../../domain/entities/project.dart';
-import '../../../shared/widgets/app_button.dart';
-import '../../../shared/widgets/app_icon.dart';
+import '../../domain/entities/project.dart';
+import 'app_button.dart';
+import 'app_icon.dart';
 
 /// Short button label for a store (the domain label stays untouched).
 String storeShortLabel(StoreType store) {
@@ -19,11 +19,15 @@ String storeShortLabel(StoreType store) {
   }
 }
 
-/// Opens a store listing in a new tab.
+/// Opens a store listing of the app called [ownerName] in a new tab.
 class StoreLinkButton extends StatelessWidget {
-  const StoreLinkButton({required this.project, required this.link, super.key});
+  const StoreLinkButton({
+    required this.ownerName,
+    required this.link,
+    super.key,
+  });
 
-  final Project project;
+  final String ownerName;
   final StoreLink link;
 
   @override
@@ -38,7 +42,7 @@ class StoreLinkButton extends StatelessWidget {
         onPressed: follow,
         isLink: true,
         compact: true,
-        semanticLabel: '${project.name} on $label',
+        semanticLabel: '$ownerName on $label',
       ),
     );
   }
