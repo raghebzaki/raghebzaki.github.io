@@ -13,6 +13,8 @@ String publisherStoreLabel(StoreType store) => switch (store) {
   StoreType.playStore => 'Google Play',
   StoreType.appGallery => 'AppGallery',
   StoreType.windows => 'Windows',
+  StoreType.webApp => 'Web App',
+  StoreType.website => 'Website',
 };
 
 /// "CloudSoft5 on" followed by a button per store developer page.

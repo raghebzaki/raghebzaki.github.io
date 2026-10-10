@@ -35,17 +35,92 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Ragheb Zaki",
-    "jobTitle": "Senior Flutter Developer",
-    "url": "https://raghebzaki.github.io/",
-    "email": "mailto:zakiragheb32@gmail.com",
-    "telephone": ["+201289181425", "+201097307097"],
-    "address": { "@type": "PostalAddress", "addressLocality": "Cairo", "addressCountry": "EG" },
-    "worksFor": { "@type": "Organization", "name": "CloudSoft5" },
-    "alumniOf": { "@type": "CollegeOrUniversity", "name": "Modern Academy" },
-    "knowsAbout": ["Flutter", "Dart", "Clean Architecture", "BLoC", "Cubit", "Provider", "SOLID Principles", "SQLite", "Hive", "Offline-first sync", "REST APIs", "Dio", "WebSockets", "Firebase", "GitHub Actions", "Fastlane", "Shorebird", "Unit and widget testing", "Google Play Console", "App Store Connect", "Huawei AppGallery"],
-    "sameAs": ["https://github.com/raghebzaki", "https://www.linkedin.com/in/ragheb-zaki-752472176/"]
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://raghebzaki.github.io/#person",
+        "name": "Ragheb Zaki",
+        "jobTitle": "Senior Flutter Developer",
+        "url": "https://raghebzaki.github.io/",
+        "email": "mailto:zakiragheb32@gmail.com",
+        "telephone": [
+          "+201289181425",
+          "+201097307097"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Cairo",
+          "addressCountry": "EG"
+        },
+        "worksFor": [
+          {
+            "@type": "Organization",
+            "name": "Cairo Photo Club",
+            "sameAs": "https://www.linkedin.com/company/cairo-photo-club"
+          },
+          {
+            "@type": "Organization",
+            "name": "CloudSoft5",
+            "sameAs": "https://www.linkedin.com/company/cloudsoft5/"
+          }
+        ],
+        "alumniOf": [
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "Modern Academy"
+          }
+        ],
+        "knowsAbout": [
+          "Flutter",
+          "Dart",
+          "Clean Architecture",
+          "BLoC",
+          "Cubit",
+          "Provider",
+          "SOLID Principles",
+          "SQLite",
+          "Hive",
+          "Offline-first sync",
+          "REST APIs",
+          "Dio",
+          "WebSockets",
+          "Firebase",
+          "GitHub Actions",
+          "Fastlane",
+          "Shorebird",
+          "Unit and widget testing",
+          "Google Play Console",
+          "App Store Connect",
+          "Huawei AppGallery"
+        ],
+        "sameAs": [
+          "https://github.com/raghebzaki",
+          "https://www.linkedin.com/in/ragheb-zaki-752472176/"
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "ZCreatorz",
+        "alternateName": "المنصة الشاملة لصناع المحتوى",
+        "description": "The all-in-one super-app for media creators, rental providers, and production studios, built from a single Flutter codebase.",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Web, iOS, Android, macOS, Windows, Linux",
+        "url": "https://zcreatorz.app/",
+        "sameAs": [
+          "https://www.zcreatorz.com/",
+          "https://apps.apple.com/eg/app/zcreatorz/id1579333148",
+          "https://play.google.com/store/apps/details?id=com.for_exper.app"
+        ],
+        "contributor": {
+          "@id": "https://raghebzaki.github.io/#person"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Cairo Photo Club",
+          "sameAs": "https://www.linkedin.com/company/cairo-photo-club"
+        }
+      }
+    ]
   }
   </script>
 
@@ -87,6 +162,10 @@
       <p>4+ years engineering scalable mobile &amp; cross-platform apps across Enterprise ERP, Retail POS, E-Commerce, and Real-time solutions. 30+ shipped live apps.</p>
       <h2>Featured projects</h2>
       <ul>
+        <li><a href="https://zcreatorz.app/" style="color:#67e8f9">ZCreatorz (المنصة الشاملة لصناع المحتوى)</a> — all-in-one super-app for media creators, rental providers and production studios; one Flutter codebase on all 6 platforms (Web, iOS, Android, macOS, Windows, Linux).
+          <a href="https://apps.apple.com/eg/app/zcreatorz/id1579333148" style="color:#67e8f9">App Store</a> ·
+          <a href="https://play.google.com/store/apps/details?id=com.for_exper.app" style="color:#67e8f9">Play Store</a> ·
+          <a href="https://www.zcreatorz.com/" style="color:#67e8f9">Website</a></li>
         <li><a href="https://play.google.com/store/apps/details?id=ly.ag.store_mobile_app" style="color:#67e8f9">Al-Riyada (متجر الريادة)</a> — e-commerce flagship app, 100,000+ downloads.</li>
         <li><a href="https://play.google.com/store/apps/details?id=com.cloudsoft5.spa" style="color:#67e8f9">ERP+ SPA</a> — multi-module ERP covering HR, CRM, Accounting and Projects.</li>
         <li><a href="https://play.google.com/store/apps/details?id=com.sutum.sutumatic" style="color:#67e8f9">Sutumatic POS</a> — cross-platform retail point-of-sale on Android, iOS, Windows and Huawei.</li>
@@ -107,10 +186,11 @@
       </ul>
       <h2>Experience</h2>
       <ul>
-        <li>CloudSoft5 — Flutter Developer, Dec 2024 – Present</li>
-        <li>Sutum ICT Consulting — Flutter Developer, Sep 2024 – Jan 2025</li>
-        <li>Coddiv — Flutter Developer, Jun 2023 – Sep 2025</li>
-        <li>Sejall Technology — Flutter Developer, Aug 2021 – Dec 2021</li>
+        <li><a href="https://www.linkedin.com/company/cairo-photo-club" style="color:#67e8f9">Cairo Photo Club</a> — Senior Flutter Developer (Part-time), Aug 2026 – Present</li>
+        <li><a href="https://www.linkedin.com/company/cloudsoft5/" style="color:#67e8f9">CloudSoft5</a> — Flutter Developer, Dec 2024 – Present</li>
+        <li><a href="https://www.linkedin.com/company/sutum-ict-consulting/" style="color:#67e8f9">Sutum ICT Consulting</a> — Flutter Developer, Sep 2024 – Jan 2025</li>
+        <li><a href="https://www.linkedin.com/company/coddiv/" style="color:#67e8f9">Coddiv</a> — Flutter Developer, Jun 2023 – Sep 2025</li>
+        <li><a href="https://www.linkedin.com/company/sejall-technology/" style="color:#67e8f9">Sejall Technology</a> — Flutter Developer, Aug 2021 – Dec 2021</li>
       </ul>
       <h2>Contact</h2>
       <p><a href="mailto:zakiragheb32@gmail.com" style="color:#67e8f9">zakiragheb32@gmail.com</a> ·

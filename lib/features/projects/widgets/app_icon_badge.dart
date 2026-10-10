@@ -11,6 +11,7 @@ AppIcon glyphIcon(ProjectGlyph glyph) => switch (glyph) {
   ProjectGlyph.modules => AppIcon.board,
   ProjectGlyph.register => AppIcon.ledger,
   ProjectGlyph.members => AppIcon.users,
+  ProjectGlyph.camera => AppIcon.camera,
 };
 
 /// A squircle "app icon" tile with a tinted gradient fill and a glyph.

@@ -37,7 +37,7 @@ void main() {
   group('Experience.period', () {
     test('current role shows Present', () {
       expect(experience.first.isCurrent, isTrue);
-      expect(experience.first.period, 'Dec 2024 – Present');
+      expect(experience.first.period, 'Aug 2026 – Present');
     });
 
     test('finished role shows end date', () {

@@ -15,7 +15,25 @@ int projectColumns(double width) => AutoFit.columns(
   maxColumns: 2,
 );
 
-/// Flagship-first grid of [ProjectCard]s (the first project is the flagship).
+/// Index rows for the projects grid. With two columns the first (flagship)
+/// project gets a full-width spotlight row and the rest pair up; with one
+/// column every project gets its own row. e.g. (5, 2) → [[0], [1, 2], [3, 4]].
+List<List<int>> projectRows(int count, int columns) {
+  if (count <= 0) return const [];
+  if (columns <= 1) {
+    return [
+      for (var i = 0; i < count; i++) [i],
+    ];
+  }
+  return [
+    [0],
+    for (var start = 1; start < count; start += columns)
+      [for (var i = start; i < start + columns && i < count; i++) i],
+  ];
+}
+
+/// Flagship-first grid of [ProjectCard]s: a full-width spotlight card, then
+/// equal-height pairs.
 class ProjectGrid extends StatelessWidget {
   const ProjectGrid({required this.projects, super.key});
 
@@ -28,28 +46,20 @@ class ProjectGrid extends StatelessWidget {
         final columns = projectColumns(constraints.maxWidth);
         Widget cardAt(int index) =>
             ProjectCard(project: projects[index], flagship: index == 0);
-        if (columns == 1) {
-          return Column(
-            spacing: AppLayout.gridGap,
-            children: [
-              for (var i = 0; i < projects.length; i++)
-                SizedBox(width: double.infinity, child: cardAt(i)),
-            ],
-          );
-        }
         return Column(
           spacing: AppLayout.gridGap,
           children: [
-            for (var start = 0; start < projects.length; start += columns)
-              EqualHeightRow(
-                gap: AppLayout.gridGap,
-                children: [
-                  for (var c = 0; c < columns; c++)
-                    start + c < projects.length
-                        ? cardAt(start + c)
-                        : const SizedBox.shrink(),
-                ],
-              ),
+            for (final row in projectRows(projects.length, columns))
+              if (row.length == 1 && (columns == 1 || row.first == 0))
+                SizedBox(width: double.infinity, child: cardAt(row.first))
+              else
+                EqualHeightRow(
+                  gap: AppLayout.gridGap,
+                  children: [
+                    for (var c = 0; c < columns; c++)
+                      c < row.length ? cardAt(row[c]) : const SizedBox.shrink(),
+                  ],
+                ),
           ],
         );
       },

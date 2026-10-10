@@ -19,7 +19,8 @@ enum AppIcon {
   layers('assets/icons/layers.svg'),
   database('assets/icons/database.svg'),
   zap('assets/icons/zap.svg'),
-  rocket('assets/icons/rocket.svg');
+  rocket('assets/icons/rocket.svg'),
+  camera('assets/icons/camera.svg');
 
   const AppIcon(this.assetPath);
 

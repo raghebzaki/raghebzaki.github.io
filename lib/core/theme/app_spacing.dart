@@ -113,7 +113,14 @@ abstract final class AppLayout {
   static const double timelineRailInset = 12;
   static const double timelineRailWidth = 2;
   static const double timelineDotSize = 12;
-  static const double timelineDotTop = 30;
+
+  /// Company badge in each timeline card header.
+  static const double companyBadgeSize = 44;
+  static const double companyArrowSize = 14;
+
+  /// Centres the rail dot on the company badge: card top padding (24) + half
+  /// the badge (22) − half the dot (6).
+  static const double timelineDotTop = 24 + 44 / 2 - 12 / 2;
   static const double timelineBulletSize = 6;
   static const double timelineBulletTop = 9;
 
@@ -133,6 +140,12 @@ abstract final class AppOpacity {
 
   /// Halo start opacity of the avatar status dot.
   static const double statusHalo = 0.55;
+
+  /// Company badge border on hover/focus (role accent colour).
+  static const double companyBadgeHoverBorder = 0.5;
+
+  /// Company badge glow on hover/focus (role accent colour).
+  static const double companyBadgeGlow = 0.3;
 }
 
 /// Design tokens: animation durations.

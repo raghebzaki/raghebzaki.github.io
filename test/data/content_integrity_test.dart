@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ragheb_portfolio/data/static_portfolio_repository.dart';
+import 'package:ragheb_portfolio/domain/entities/experience.dart';
 import 'package:ragheb_portfolio/domain/entities/profile.dart';
 import 'package:ragheb_portfolio/domain/entities/project.dart';
 
@@ -9,10 +10,88 @@ int _prefix(String label) =>
 void main() {
   const repo = StaticPortfolioRepository();
 
-  test('4 featured projects with unique ids', () {
+  test('5 featured projects with unique ids, ZCreatorz first', () {
     final ids = repo.featuredProjects.map((p) => p.id).toList();
-    expect(ids.length, 4);
-    expect(ids.toSet().length, 4);
+    expect(ids, [
+      'zcreatorz',
+      'al-riyada',
+      'erp-plus-spa',
+      'sutumatic-pos',
+      'cfi-service-center',
+    ]);
+  });
+
+  test('ZCreatorz content', () {
+    final z = repo.featuredProjects.first;
+    expect(z.name, 'ZCreatorz');
+    expect(z.nativeName, 'المنصة الشاملة لصناع المحتوى');
+    expect(z.badge, 'All 6 Platforms Supported');
+    expect(z.glyph, ProjectGlyph.camera);
+    expect(
+      z.description,
+      'The all-in-one super-app for media creators, rental providers, and '
+      'production studios. Engineered from a single unified Flutter codebase '
+      'running seamlessly across Mobile, Web, and Desktop environments.',
+    );
+    expect(z.stack, [
+      'Clean Architecture',
+      'BLoC',
+      'Shorebird (OTA)',
+      'Adaptive UI',
+    ]);
+    expect(z.platforms, {
+      AppPlatform.web,
+      AppPlatform.ios,
+      AppPlatform.android,
+      AppPlatform.macos,
+      AppPlatform.windows,
+      AppPlatform.linux,
+    });
+    expect(z.links, const [
+      StoreLink(store: StoreType.webApp, url: 'https://zcreatorz.app/'),
+      StoreLink(
+        store: StoreType.appStore,
+        url: 'https://apps.apple.com/eg/app/zcreatorz/id1579333148',
+      ),
+      StoreLink(
+        store: StoreType.playStore,
+        url: 'https://play.google.com/store/apps/details?id=com.for_exper.app',
+      ),
+      StoreLink(store: StoreType.website, url: 'https://www.zcreatorz.com/'),
+    ]);
+  });
+
+  test('5 roles with LinkedIn company pages and monograms', () {
+    final roles = repo.experience;
+    expect(roles.map((r) => r.company), [
+      'Cairo Photo Club',
+      'CloudSoft5',
+      'Sutum ICT Consulting',
+      'Coddiv',
+      'Sejall Technology',
+    ]);
+    expect(roles.map((r) => r.companyUrl), [
+      'https://www.linkedin.com/company/cairo-photo-club',
+      'https://www.linkedin.com/company/cloudsoft5/',
+      'https://www.linkedin.com/company/sutum-ict-consulting/',
+      'https://www.linkedin.com/company/coddiv/',
+      'https://www.linkedin.com/company/sejall-technology/',
+    ]);
+    expect(roles.map((r) => r.monogram), ['CP', 'C5', 'SI', 'CD', 'SJ']);
+  });
+
+  test('Cairo Photo Club role', () {
+    final cpc = repo.experience.first;
+    expect(cpc.role, 'Senior Flutter Developer (Part-time)');
+    expect(cpc.location, 'Cairo, Egypt / Remote');
+    expect(cpc.employmentType, EmploymentType.partTime);
+    expect(cpc.isCurrent, isTrue);
+    expect(cpc.period, 'Aug 2026 – Present');
+    expect(cpc.highlights, hasLength(4));
+    expect(
+      cpc.highlights.first,
+      startsWith('Co-engineering and scaling the ZCreatorz'),
+    );
   });
 
   test('store links are https', () {

@@ -4,7 +4,25 @@ import '../../domain/entities/year_month.dart';
 /// Newest start first (enforced by tests).
 const experience = <Experience>[
   Experience(
+    company: 'Cairo Photo Club',
+    shortName: 'Cairo Photo Club',
+    role: 'Senior Flutter Developer (Part-time)',
+    location: 'Cairo, Egypt / Remote',
+    start: YearMonth(2026, 8),
+    employmentType: EmploymentType.partTime,
+    companyUrl: 'https://www.linkedin.com/company/cairo-photo-club',
+    monogram: 'CP',
+    highlights: [
+      'Co-engineering and scaling the ZCreatorz media super-app across all 6 target platforms (iOS, Android, Web, macOS, Windows, Linux).',
+      'Architecting features for gear marketplace, equipment rentals, studio bookings, and vendor dashboards while refactoring legacy modules into clean architecture components.',
+      'Streamlining zero-downtime production deployments with Over-The-Air (OTA) live patching via Shorebird.',
+      'Delivering responsive desktop layouts, window management, and keyboard shortcut integrations alongside touch-first mobile UX.',
+    ],
+  ),
+  Experience(
     company: 'CloudSoft5',
+    companyUrl: 'https://www.linkedin.com/company/cloudsoft5/',
+    monogram: 'C5',
     shortName: 'CloudSoft5',
     role: 'Flutter Developer',
     location: 'Cairo, Egypt',
@@ -18,6 +36,8 @@ const experience = <Experience>[
   ),
   Experience(
     company: 'Sutum ICT Consulting',
+    companyUrl: 'https://www.linkedin.com/company/sutum-ict-consulting/',
+    monogram: 'SI',
     shortName: 'Sutum ICT',
     role: 'Flutter Developer',
     location: 'Saudi Arabia',
@@ -30,6 +50,8 @@ const experience = <Experience>[
   ),
   Experience(
     company: 'Coddiv',
+    companyUrl: 'https://www.linkedin.com/company/coddiv/',
+    monogram: 'CD',
     shortName: 'Coddiv',
     role: 'Flutter Developer',
     location: 'Cairo, Egypt',
@@ -55,6 +77,8 @@ const experience = <Experience>[
   ),
   Experience(
     company: 'Sejall Technology',
+    companyUrl: 'https://www.linkedin.com/company/sejall-technology/',
+    monogram: 'SJ',
     shortName: 'Sejall Tech',
     role: 'Flutter Developer',
     location: 'Giza, Egypt',

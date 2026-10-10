@@ -16,6 +16,10 @@ String storeShortLabel(StoreType store) {
       return 'AppGallery';
     case StoreType.windows:
       return 'Windows';
+    case StoreType.webApp:
+      return 'Web App';
+    case StoreType.website:
+      return 'Website';
   }
 }
 

@@ -1,6 +1,37 @@
 import '../../domain/entities/project.dart';
 
+/// The first project is the flagship: it gets the spotlight row on desktop.
 const featuredProjects = <Project>[
+  Project(
+    id: 'zcreatorz',
+    name: 'ZCreatorz',
+    nativeName: 'المنصة الشاملة لصناع المحتوى',
+    badge: 'All 6 Platforms Supported',
+    description: 'The all-in-one super-app for media creators, rental providers, and production studios. Engineered from a single unified Flutter codebase running seamlessly across Mobile, Web, and Desktop environments.',
+    stack: ['Clean Architecture', 'BLoC', 'Shorebird (OTA)', 'Adaptive UI'],
+    platforms: {
+      AppPlatform.web,
+      AppPlatform.ios,
+      AppPlatform.android,
+      AppPlatform.macos,
+      AppPlatform.windows,
+      AppPlatform.linux,
+    },
+    links: [
+      StoreLink(store: StoreType.webApp, url: 'https://zcreatorz.app/'),
+      StoreLink(
+        store: StoreType.appStore,
+        url: 'https://apps.apple.com/eg/app/zcreatorz/id1579333148',
+      ),
+      StoreLink(
+        store: StoreType.playStore,
+        url: 'https://play.google.com/store/apps/details?id=com.for_exper.app',
+      ),
+      StoreLink(store: StoreType.website, url: 'https://www.zcreatorz.com/'),
+    ],
+    glyph: ProjectGlyph.camera,
+    accent: AccentTone.cyan,
+  ),
   Project(
     id: 'al-riyada',
     name: 'Al-Riyada',

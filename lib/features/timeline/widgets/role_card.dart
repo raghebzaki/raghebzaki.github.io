@@ -6,6 +6,7 @@ import '../../../core/theme/app_typography.dart';
 import '../../../domain/entities/experience.dart';
 import '../../../shared/widgets/glow_card.dart';
 import '../../../shared/widgets/tag_pill.dart';
+import 'company_link.dart';
 
 /// One role: its card plus the dot that sits on the timeline rail.
 class RoleCard extends StatelessWidget {
@@ -20,8 +21,11 @@ class RoleCard extends StatelessWidget {
     AppColors.cyan400,
     AppColors.sky400,
     AppColors.blue500,
+    AppColors.indigo400,
     AppColors.blue700,
   ];
+
+  Color get _accent => dotColors[index % dotColors.length];
 
   static const double _dotLeft =
       AppLayout.timelineRailLeft +
@@ -39,7 +43,8 @@ class RoleCard extends StatelessWidget {
             vertical: AppSpacing.s24,
             horizontal: AppLayout.cardPadding,
           ),
-          builder: (context, highlighted) => _RoleBody(experience),
+          builder: (context, highlighted) =>
+              _RoleBody(experience, accent: _accent),
         ),
         Positioned(
           left: _dotLeft,
@@ -51,7 +56,7 @@ class RoleCard extends StatelessWidget {
               key: ValueKey('timeline-dot-$index'),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: dotColors[index % dotColors.length],
+                color: _accent,
                 boxShadow: experience.isCurrent
                     ? AppShadows.timelineDotActive
                     : AppShadows.timelineDot,
@@ -65,9 +70,10 @@ class RoleCard extends StatelessWidget {
 }
 
 class _RoleBody extends StatelessWidget {
-  const _RoleBody(this.experience);
+  const _RoleBody(this.experience, {required this.accent});
 
   final Experience experience;
+  final Color accent;
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +87,14 @@ class _RoleBody extends StatelessWidget {
           runSpacing: AppSpacing.s8,
           children: [
             Semantics(
+              container: true,
               header: true,
-              child: Text(experience.company, style: AppTextStyles.tileTitle),
+              child: CompanyLink(
+                company: experience.company,
+                url: experience.companyUrl,
+                monogram: experience.monogram,
+                accent: accent,
+              ),
             ),
             Text(
               '${experience.role} · ${experience.period}',
@@ -96,6 +108,7 @@ class _RoleBody extends StatelessWidget {
           runSpacing: AppSpacing.s8,
           children: [
             TagPill(experience.location),
+            if (experience.employmentType case final type?) TagPill(type.label),
             if (experience.isCurrent)
               const TagPill('Current', tone: TagTone.hot),
             for (final engagement in experience.engagements)

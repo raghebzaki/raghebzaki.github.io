@@ -1,10 +1,14 @@
 import 'package:equatable/equatable.dart';
 
+/// Declaration order is the order platform pills are shown in.
 enum AppPlatform {
-  android('Android'),
+  web('Web'),
   ios('iOS'),
-  huawei('Huawei'),
-  windows('Windows');
+  android('Android'),
+  macos('macOS'),
+  windows('Windows'),
+  linux('Linux'),
+  huawei('Huawei');
 
   const AppPlatform(this.label);
   final String label;
@@ -14,7 +18,9 @@ enum StoreType {
   playStore('Play Store'),
   appStore('App Store'),
   appGallery('Huawei AppGallery'),
-  windows('Windows');
+  windows('Windows'),
+  webApp('Web App'),
+  website('Website');
 
   const StoreType(this.label);
   final String label;
@@ -31,7 +37,7 @@ class StoreLink extends Equatable {
 }
 
 /// What the app is about; presentation maps it to an app-icon glyph.
-enum ProjectGlyph { cart, modules, register, members }
+enum ProjectGlyph { cart, modules, register, members, camera }
 
 enum AccentTone { cyan, blue }
 

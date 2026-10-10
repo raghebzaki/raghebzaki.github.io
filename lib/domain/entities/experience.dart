@@ -29,14 +29,26 @@ class Experience extends Equatable {
     required this.location,
     required this.start,
     this.end,
+    this.employmentType,
     this.engagements = const [],
     required this.highlights,
+    required this.companyUrl,
+    required this.monogram,
   });
 
   final String company;
   final String shortName;
   final String role;
   final String location;
+
+  /// The company's public page (LinkedIn).
+  final String companyUrl;
+
+  /// Two-letter mark shown in the company badge.
+  final String monogram;
+
+  /// A plain type badge (e.g. Part-time) for roles without [engagements].
+  final EmploymentType? employmentType;
   final YearMonth start;
 
   /// `null` means the role is current ("Present").
@@ -57,7 +69,10 @@ class Experience extends Equatable {
     location,
     start,
     end,
+    employmentType,
     engagements,
     highlights,
+    companyUrl,
+    monogram,
   ];
 }

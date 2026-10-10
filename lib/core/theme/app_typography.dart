@@ -35,6 +35,14 @@ abstract final class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
+  /// Monogram inside a timeline company badge (colour set per role).
+  static const TextStyle companyMonogram = TextStyle(
+    fontFamily: AppFonts.mono,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+  );
+
   static const TextStyle tileTitle = TextStyle(
     fontFamily: AppFonts.sans,
     fontFamilyFallback: AppFonts.fallback,

@@ -72,6 +72,7 @@ void main() {
         ProjectGlyph.modules: AppIcon.board,
         ProjectGlyph.register: AppIcon.ledger,
         ProjectGlyph.members: AppIcon.users,
+        ProjectGlyph.camera: AppIcon.camera,
       };
       expect(expected.keys, unorderedEquals(ProjectGlyph.values));
       for (final glyph in ProjectGlyph.values) {
@@ -84,6 +85,29 @@ void main() {
       expect(storeShortLabel(StoreType.appStore), 'App Store');
       expect(storeShortLabel(StoreType.appGallery), 'AppGallery');
       expect(storeShortLabel(StoreType.windows), 'Windows');
+      expect(storeShortLabel(StoreType.webApp), 'Web App');
+      expect(storeShortLabel(StoreType.website), 'Website');
+    });
+
+    test('projectRows: flagship spotlight row, then pairs', () {
+      expect(projectRows(5, 2), [
+        [0],
+        [1, 2],
+        [3, 4],
+      ]);
+      expect(projectRows(5, 1), [
+        [0],
+        [1],
+        [2],
+        [3],
+        [4],
+      ]);
+      expect(projectRows(4, 2), [
+        [0],
+        [1, 2],
+        [3],
+      ]);
+      expect(projectRows(0, 2), isEmpty);
     });
   });
 
@@ -94,6 +118,8 @@ void main() {
         StoreType.appStore: 'apps.apple.com',
         StoreType.appGallery: 'appgallery.huawei.com',
         StoreType.windows: 'www.sutumatic.com',
+        StoreType.webApp: 'zcreatorz.app',
+        StoreType.website: 'www.zcreatorz.com',
       };
       for (final p in projects) {
         for (final l in p.links) {
@@ -107,12 +133,14 @@ void main() {
 
     test('stack pills and glyphs', () {
       expect(projects.map((p) => p.stack), [
+        ['Clean Architecture', 'BLoC', 'Shorebird (OTA)', 'Adaptive UI'],
         ['E-Commerce', 'Payment integration', 'Real-time order tracking'],
         ['ERP', 'ERPplus5.com integration', 'HR · CRM · Accounting'],
         ['Retail POS', 'Real-time inventory', 'Offline/online sales reporting'],
         ['Member portal', 'Digital requests', 'Service tracking'],
       ]);
       expect(projects.map((p) => p.glyph), [
+        ProjectGlyph.camera,
         ProjectGlyph.cart,
         ProjectGlyph.modules,
         ProjectGlyph.register,
@@ -122,16 +150,22 @@ void main() {
   });
 
   group('layout', () {
-    testWidgets('1440: two columns, equal heights, store rows aligned', (
-      tester,
-    ) async {
+    testWidgets('1440: spotlight row, then equal-height pairs', (tester) async {
       await pumpProjects(tester);
-      expect(find.byType(ProjectCard), findsNWidgets(4));
-      final dy0 = tester.getTopLeft(card(0)).dy;
-      expect(tester.getTopLeft(card(1)).dy, dy0);
-      expect(tester.getTopLeft(card(2)).dy, greaterThan(dy0));
-      expect(tester.getTopLeft(card(2)).dy, tester.getTopLeft(card(3)).dy);
-      for (final (a, b) in [(0, 1), (2, 3)]) {
+      expect(find.byType(ProjectCard), findsNWidgets(5));
+      // ZCreatorz spans the full content column on its own row.
+      final spotlight = tester.getRect(card(0));
+      final pairLeft = tester.getRect(card(1));
+      final pairRight = tester.getRect(card(2));
+      expect(spotlight.left, closeTo(pairLeft.left, 0.5));
+      expect(spotlight.right, closeTo(pairRight.right, 0.5));
+      expect(pairLeft.top, greaterThan(spotlight.bottom));
+      expect(tester.widget<ProjectCard>(card(0)).flagship, isTrue);
+      expect(tester.widget<ProjectCard>(card(1)).flagship, isFalse);
+      expect(pairLeft.top, pairRight.top);
+      expect(tester.getTopLeft(card(3)).dy, tester.getTopLeft(card(4)).dy);
+      expect(tester.getTopLeft(card(3)).dy, greaterThan(pairLeft.top));
+      for (final (a, b) in [(1, 2), (3, 4)]) {
         expect(
           tester.getSize(card(a)).height,
           closeTo(tester.getSize(card(b)).height, 0.5),
@@ -159,7 +193,7 @@ void main() {
     for (final width in [390.0, 360.0]) {
       testWidgets('${width.toInt()}: one column, no overflow', (tester) async {
         await pumpProjects(tester, size: Size(width, 800));
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 5; i++) {
           expect(tester.getTopLeft(card(i)).dx, tester.getTopLeft(card(0)).dx);
           expect(tester.getRect(card(i)).right, lessThanOrEqualTo(width));
         }
@@ -185,7 +219,7 @@ void main() {
   group('content in cards', () {
     testWidgets('shows copy, pills and the Arabic name', (tester) async {
       await pumpProjects(tester);
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 5; i++) {
         final p = projects[i];
         for (final text in [p.badge, p.name, p.description]) {
           expect(inCard(i, find.text(text)), findsOneWidget, reason: text);
@@ -224,7 +258,7 @@ void main() {
 
     testWidgets('no phone mockup exists', (tester) async {
       await pumpProjects(tester);
-      expect(find.byType(AppIconBadge), findsNWidgets(4));
+      expect(find.byType(AppIconBadge), findsNWidgets(5));
       expect(
         find.byWidgetPredicate((w) => w.runtimeType.toString() == 'PhoneFrame'),
         findsNothing,
@@ -236,13 +270,13 @@ void main() {
     testWidgets('match the data and open in a new tab', (tester) async {
       final handle = tester.ensureSemantics();
       await pumpProjects(tester);
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 5; i++) {
         final p = projects[i];
         final links = tester
             .widgetList<Link>(inCard(i, find.byType(Link)))
             .toList();
         expect(links, hasLength(p.links.length));
-        expect(links.length, [2, 3, 3, 2][i]);
+        expect(links.length, [4, 2, 3, 3, 2][i]);
         for (var j = 0; j < links.length; j++) {
           expect(links[j].uri, Uri.parse(p.links[j].url));
           expect(links[j].target, LinkTarget.blank);
@@ -251,15 +285,20 @@ void main() {
         }
       }
       expect(
-        inCard(2, find.widgetWithText(TagPill, 'Huawei')),
+        inCard(3, find.widgetWithText(TagPill, 'Huawei')),
         findsOneWidget,
         reason: 'pill only',
       );
       expect(
-        inCard(2, find.widgetWithText(AppButton, 'AppGallery')),
+        inCard(3, find.widgetWithText(AppButton, 'AppGallery')),
         findsNothing,
       );
-      expect(inCard(1, find.text('AppGallery')), findsOneWidget);
+      expect(inCard(2, find.text('AppGallery')), findsOneWidget);
+      // ZCreatorz: Web App, App Store, Play Store, Website — in that order.
+      expect(
+        [for (final l in projects[0].links) storeShortLabel(l.store)],
+        ['Web App', 'App Store', 'Play Store', 'Website'],
+      );
       handle.dispose();
     });
   });
@@ -289,7 +328,7 @@ void main() {
 
       final label = find.descendant(
         of: inCard(0, find.byType(StoreLinkButton)).first,
-        matching: find.text('Play Store'),
+        matching: find.text('Web App'),
       );
       Focus.of(tester.element(label)).requestFocus();
       await settle(tester);
