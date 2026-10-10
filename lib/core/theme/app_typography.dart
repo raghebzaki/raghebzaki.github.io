@@ -90,6 +90,15 @@ abstract final class AppTextStyles {
     color: AppColors.textSecondary,
   );
 
+  /// Nav row text in the compact (mobile) menu panel.
+  static const TextStyle navLarge = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
+  );
+
   static const TextStyle brand = TextStyle(
     fontFamily: AppFonts.sans,
     fontFamilyFallback: AppFonts.fallback,
@@ -224,6 +233,7 @@ class AppTypography {
   TextStyle get button => AppTextStyles.button;
   TextStyle get buttonPrimary => AppTextStyles.buttonPrimary;
   TextStyle get nav => AppTextStyles.nav;
+  TextStyle get navLarge => AppTextStyles.navLarge;
   TextStyle get brand => AppTextStyles.brand;
   TextStyle get eyebrow => AppTextStyles.eyebrow;
   TextStyle get tag => AppTextStyles.tag;

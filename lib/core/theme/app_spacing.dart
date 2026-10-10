@@ -31,7 +31,11 @@ abstract final class AppRadii {
   static const double panel = 24;
   static const double phoneOuter = 38;
   static const double phoneInner = 30;
+  static const double brand = 9;
 
+  static const BorderRadius brandBorder = BorderRadius.all(
+    Radius.circular(brand),
+  );
   static const BorderRadius pillBorder = BorderRadius.all(
     Radius.circular(pill),
   );
@@ -67,6 +71,11 @@ abstract final class AppLayout {
   static const double gutter = 24;
   static const double minTapTarget = 44;
   static const double gridGap = 20;
+
+  /// Vertical section paddings from the prototype.
+  static const double projectsTop = 96;
+  static const double defaultTop = 112;
+  static const double footerBottom = 48;
 }
 
 /// Design tokens: animation durations.

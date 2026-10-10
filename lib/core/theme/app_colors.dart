@@ -171,6 +171,16 @@ abstract final class AppShadows {
     BoxShadow(color: Color(0xB322D3EE), blurRadius: 18), // cyan .7
   ];
 
+  /// Drop shadow under the compact menu panel.
+  static const List<BoxShadow> menuPanel = [
+    BoxShadow(
+      color: Color(0x66000000), // black .4
+      offset: Offset(0, 16),
+      blurRadius: 32,
+      spreadRadius: -12,
+    ),
+  ];
+
   static const List<BoxShadow> timelineDot = [
     BoxShadow(color: AppColors.background, spreadRadius: 4),
   ];
