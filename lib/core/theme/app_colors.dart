@@ -1,5 +1,7 @@
 import 'package:flutter/painting.dart';
 
+import 'css_gradient.dart';
+
 /// Design tokens: colors. Names mirror the approved design spec.
 abstract final class AppColors {
   // Surfaces
@@ -46,6 +48,16 @@ abstract final class AppColors {
   static const Color skeleton = Color(0xFF232B38);
   static const Color phoneImageStart = Color(0xFF1E2A3D);
   static const Color phoneImageEnd = Color(0xFF14202F);
+  static const Color phoneSelectedStart = Color(0xFF164E63);
+  static const Color phoneSelectedEnd = Color(0xFF0C2A3A);
+  static const Color phoneSelectedRing = Color(0x9922D3EE); // cyan .6
+  static const Color phoneNotch = Color(0xFF000000);
+  static const Color mockTintCyan = Color(0x2622D3EE); // cyan .15
+  static const Color mockTintBlue = Color(0x2E3B82F6); // blue .18
+  static const Color white85 = Color(0xD9FFFFFF);
+  static const Color white88 = Color(0xE0FFFFFF);
+  static const Color white75 = Color(0xBFFFFFFF);
+  static const Color white45 = Color(0x73FFFFFF);
 
   // Derived glows and tints
   static const Color gridLine = Color(0x0D94A3B8); // rgba(148,163,184,.05)
@@ -71,6 +83,24 @@ abstract final class AppGradients {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [AppColors.cyan400, AppColors.blue500],
+  );
+
+  /// Exact CSS `linear-gradient(135deg, …)` for boxes of any aspect ratio.
+  static const CssLinearGradient primaryCss = CssLinearGradient(
+    colors: [AppColors.cyan400, AppColors.blue500],
+  );
+
+  /// CSS `linear-gradient(90deg, cyan400, blue500)` (highlight bars).
+  static const LinearGradient highlight = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [AppColors.cyan400, AppColors.blue500],
+  );
+
+  static const LinearGradient phoneImageSelected = LinearGradient(
+    begin: Alignment(-0.34, -0.94),
+    end: Alignment(0.34, 0.94),
+    colors: [AppColors.phoneSelectedStart, AppColors.phoneSelectedEnd],
   );
 
   static const LinearGradient primaryHover = LinearGradient(

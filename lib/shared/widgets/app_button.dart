@@ -13,28 +13,40 @@ class AppButton extends StatefulWidget {
   const AppButton.primary({
     required this.label,
     this.icon,
+    this.trailingIcon,
     this.onPressed,
     this.semanticLabel,
     this.isLink = false,
+    this.compact = false,
     super.key,
   }) : _kind = _ButtonKind.primary;
 
   const AppButton.secondary({
     required this.label,
     this.icon,
+    this.trailingIcon,
     this.onPressed,
     this.semanticLabel,
     this.isLink = false,
+    this.compact = false,
     super.key,
   }) : _kind = _ButtonKind.secondary;
 
   final String label;
   final AppIcon? icon;
+
+  /// Icon shown after the label.
+  final AppIcon? trailingIcon;
   final VoidCallback? onPressed;
   final String? semanticLabel;
 
   /// Exposes link semantics instead of button semantics (use inside `Link`).
   final bool isLink;
+
+  /// Tighter horizontal padding (16 instead of 20) for buttons that sit in
+  /// narrow columns, e.g. store links in a two-column project card. The tap
+  /// target height is unchanged.
+  final bool compact;
   final _ButtonKind _kind;
 
   @override
@@ -91,6 +103,10 @@ class _AppButtonState extends State<AppButton> {
           const SizedBox(width: AppSpacing.s8),
         ],
         Text(widget.label, style: style),
+        if (widget.trailingIcon != null) ...[
+          const SizedBox(width: AppSpacing.s8),
+          AppIconView(widget.trailingIcon!, color: foreground),
+        ],
       ],
     );
 
@@ -115,7 +131,9 @@ class _AppButtonState extends State<AppButton> {
               constraints: const BoxConstraints(
                 minHeight: AppLayout.minTapTarget,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s20),
+              padding: EdgeInsets.symmetric(
+                horizontal: widget.compact ? AppSpacing.s16 : AppSpacing.s20,
+              ),
               decoration: decoration,
               child: Center(widthFactor: 1, heightFactor: 1, child: content),
             ),

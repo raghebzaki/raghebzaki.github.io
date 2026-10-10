@@ -75,6 +75,21 @@ abstract final class AppLayout {
   static const double heroGridSpacing = 56;
   static const double statsMinTile = 220;
 
+  /// Featured projects grid.
+  static const double projectMinTile = 540;
+  static const double cardPadding = 28;
+  static const double cardInfoMin = 220;
+
+  /// Phone mockup (outer box, border-box).
+  static const double phoneWidth = 208;
+  static const double phoneHeight = 424;
+  static const double phoneInset = 8;
+  static const double phoneLift = 6;
+  static const double phoneLiftAngle = -0.01745329251994; // -1deg in rad
+  static const double notchWidth = 60;
+  static const double notchHeight = 17;
+  static const double notchTop = 9;
+
   /// Vertical section paddings from the prototype.
   static const double projectsTop = 96;
   static const double defaultTop = 112;

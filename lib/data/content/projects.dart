@@ -8,7 +8,7 @@ const featuredProjects = <Project>[
     badge: '100,000+ Downloads',
     summary: 'E-Commerce flagship app, live on both major stores.',
     description: 'E-commerce retail application featuring seamless product browsing, shopping cart, checkout, payment integration, and real-time order tracking.',
-    tags: ['E-Commerce', 'Play Store', 'App Store'],
+    tags: ['E-Commerce', 'Android', 'iOS'],
     platforms: {AppPlatform.android, AppPlatform.ios},
     links: [
       StoreLink(

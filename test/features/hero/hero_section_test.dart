@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ragheb_portfolio/app/app.dart';
 import 'package:ragheb_portfolio/data/content/profile.dart';
+import 'package:ragheb_portfolio/features/hero/hero_section.dart';
 import 'package:ragheb_portfolio/features/hero/widgets/hero_backdrop.dart';
 import 'package:ragheb_portfolio/features/hero/widgets/stats_bar.dart';
 import 'package:ragheb_portfolio/features/shell/cubit/navigation_cubit.dart';
@@ -55,7 +56,15 @@ void main() {
     await pumpApp(tester);
     await tester.pumpAndSettle();
 
-    final links = tester.widgetList<Link>(find.byType(Link)).toList();
+    // Scoped to the hero: the projects section below adds store links.
+    final links = tester
+        .widgetList<Link>(
+          find.descendant(
+            of: find.byType(HeroSection),
+            matching: find.byType(Link),
+          ),
+        )
+        .toList();
     expect(links, hasLength(3));
     expect(links.every((l) => l.target == LinkTarget.blank), isTrue);
     expect(

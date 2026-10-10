@@ -150,6 +150,97 @@ abstract final class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
+  // Phone mockup labels (decorative).
+  static const TextStyle mockStoreTitle = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textBright,
+  );
+
+  static const TextStyle mockPosTitle = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 14 * -0.02,
+    color: AppColors.textBright,
+  );
+
+  static const TextStyle mockBrandTitle = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 15 * -0.02,
+    color: AppColors.textBright,
+  );
+
+  static const TextStyle mockBrandPlus = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 15 * -0.02,
+    color: AppColors.cyan400,
+  );
+
+  static const TextStyle mockMono = TextStyle(
+    fontFamily: AppFonts.mono,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 10,
+    color: AppColors.cyan400,
+  );
+
+  static const TextStyle mockModuleLabel = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textEmphasis,
+  );
+
+  static const TextStyle mockServiceCenter = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textEmphasis,
+  );
+
+  static const TextStyle mockCharge = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+    color: AppColors.onAccent,
+  );
+
+  static const TextStyle mockChip = TextStyle(
+    fontFamily: AppFonts.mono,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 11,
+    fontWeight: FontWeight.w700,
+    color: AppColors.onAccent,
+  );
+
+  static const TextStyle mockMember = TextStyle(
+    fontFamily: AppFonts.mono,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 9,
+    letterSpacing: 9 * 0.14,
+    color: AppColors.white75,
+  );
+
+  /// Native-script project name under the card title.
+  static const TextStyle nativeName = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 16,
+    color: AppColors.textSecondary,
+  );
+
   static const TextStyle segment = TextStyle(
     fontFamily: AppFonts.sans,
     fontFamilyFallback: AppFonts.fallback,

@@ -6,7 +6,15 @@ enum AppIcon {
   download('assets/icons/download.svg'),
   github('assets/icons/github.svg'),
   linkedin('assets/icons/linkedin.svg'),
-  mail('assets/icons/mail.svg');
+  mail('assets/icons/mail.svg'),
+  cart('assets/icons/cart.svg'),
+  search('assets/icons/search.svg'),
+  users('assets/icons/users.svg'),
+  message('assets/icons/message.svg'),
+  ledger('assets/icons/ledger.svg'),
+  board('assets/icons/board.svg'),
+  chevronRight('assets/icons/chevron_right.svg'),
+  arrowUpRight('assets/icons/arrow_up_right.svg');
 
   const AppIcon(this.assetPath);
 
