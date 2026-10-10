@@ -50,12 +50,18 @@ abstract final class AppColors {
   // Derived glows and tints
   static const Color gridLine = Color(0x0D94A3B8); // rgba(148,163,184,.05)
   static const Color cyanBorderHover = Color(0x5922D3EE); // .35
+  static const Color cyanBorderStrong = Color(0x8022D3EE); // .50
   static const Color cyanTint = Color(0x1422D3EE); // .08
   static const Color cyanTintStrong = Color(0x2922D3EE); // .16
   static const Color blueTint = Color(0x173B82F6); // .09
   static const Color blueTintStrong = Color(0x333B82F6); // .20
   static const Color chipErpBorder = Color(0x4D22D3EE); // .30
   static const Color chipErpFill = Color(0x1222D3EE); // .07
+  static const Color heroGlowCyan = Color(0x2922D3EE); // .16
+  static const Color heroGlowCyanEnd = Color(0x0022D3EE);
+  static const Color heroGlowBlue = Color(0x243B82F6); // .14
+  static const Color heroGlowBlueEnd = Color(0x003B82F6);
+  static const Color gridLineEnd = Color(0x0094A3B8);
   static const Color chipScBorder = Color(0x5960A5FA); // .35
 }
 
@@ -73,9 +79,16 @@ abstract final class AppGradients {
     colors: [AppColors.cyan300, AppColors.blue400],
   );
 
+  static const List<Color> textColors = [
+    AppColors.cyan300,
+    AppColors.sky400,
+    AppColors.blue500,
+  ];
+  static const List<double> textStops = [0.0, 0.45, 1.0];
+
   static const LinearGradient text = LinearGradient(
-    colors: [AppColors.cyan300, AppColors.sky400, AppColors.blue500],
-    stops: [0.0, 0.45, 1.0],
+    colors: textColors,
+    stops: textStops,
   );
 
   static const LinearGradient surfaceCard = LinearGradient(

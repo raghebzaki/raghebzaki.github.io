@@ -22,14 +22,19 @@ class SectionContainer extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: AppLayout.maxContent),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            AppLayout.gutter,
-            top,
-            AppLayout.gutter,
-            bottom,
+        // Always take the full column width so start-aligned content sits on
+        // the column edge instead of shrinking and being centered.
+        child: SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              AppLayout.gutter,
+              top,
+              AppLayout.gutter,
+              bottom,
+            ),
+            child: child,
           ),
-          child: child,
         ),
       ),
     );

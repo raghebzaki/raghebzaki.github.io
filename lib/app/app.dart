@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/motion/play_once.dart';
 import '../core/theme/app_theme.dart';
 import '../data/static_portfolio_repository.dart';
 import '../domain/repositories/portfolio_repository.dart';
@@ -31,8 +32,13 @@ class _PortfolioAppState extends State<PortfolioApp> {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<PortfolioRepository>(
-      create: (_) => const StaticPortfolioRepository(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<PortfolioRepository>(
+          create: (_) => const StaticPortfolioRepository(),
+        ),
+        RepositoryProvider<PlayOnce>(create: (_) => PlayOnce()),
+      ],
       child: BlocProvider<NavigationCubit>(
         create: (_) => NavigationCubit(),
         child: MaterialApp.router(

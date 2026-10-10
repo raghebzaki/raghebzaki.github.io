@@ -71,6 +71,9 @@ abstract final class AppLayout {
   static const double gutter = 24;
   static const double minTapTarget = 44;
   static const double gridGap = 20;
+  static const double ctaGap = 12;
+  static const double heroGridSpacing = 56;
+  static const double statsMinTile = 220;
 
   /// Vertical section paddings from the prototype.
   static const double projectsTop = 96;

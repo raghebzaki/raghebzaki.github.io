@@ -43,7 +43,9 @@ class SiteHeader extends StatelessWidget {
                     final compact = constraints.maxWidth < compactBelow;
                     return Row(
                       children: [
-                        const Flexible(child: BrandMark()),
+                        // Not flexible: a Flexible brand would take half of
+                        // the free space and push the nav toward the middle.
+                        const BrandMark(),
                         if (compact) ...[
                           const Spacer(),
                           _MenuToggle(menuOpen: menuOpen),

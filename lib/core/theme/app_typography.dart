@@ -126,6 +126,22 @@ abstract final class AppTextStyles {
     color: AppColors.textSecondary,
   );
 
+  static const TextStyle tagLarge = TextStyle(
+    fontFamily: AppFonts.mono,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
+  );
+
+  /// Label under a stat value (14px, default line height).
+  static const TextStyle statLabel = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 14,
+    color: AppColors.textSecondary,
+  );
+
   static const TextStyle chip = TextStyle(
     fontFamily: AppFonts.mono,
     fontFamilyFallback: AppFonts.fallback,
@@ -237,6 +253,8 @@ class AppTypography {
   TextStyle get brand => AppTextStyles.brand;
   TextStyle get eyebrow => AppTextStyles.eyebrow;
   TextStyle get tag => AppTextStyles.tag;
+  TextStyle get tagLarge => AppTextStyles.tagLarge;
+  TextStyle get statLabel => AppTextStyles.statLabel;
   TextStyle get chip => AppTextStyles.chip;
   TextStyle get segment => AppTextStyles.segment;
 }

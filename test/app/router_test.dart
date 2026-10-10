@@ -5,6 +5,8 @@ import 'package:ragheb_portfolio/app/app.dart';
 import 'package:ragheb_portfolio/features/shell/cubit/navigation_cubit.dart';
 import 'package:ragheb_portfolio/features/shell/portfolio_page.dart';
 import 'package:ragheb_portfolio/features/shell/section_id.dart';
+import 'package:ragheb_portfolio/features/shell/widgets/compact_menu.dart';
+import 'package:ragheb_portfolio/features/shell/widgets/site_header.dart';
 import 'package:ragheb_portfolio/features/timeline/timeline_section.dart';
 
 Future<void> pumpApp(
@@ -32,6 +34,11 @@ void main() {
     // on a taller viewport "Timeline" cannot reach the top and the page ends
     // at the bottom, where the spy correctly reports Contact.
     await pumpApp(tester, size: const Size(1440, 600));
+    // Scoped to the header: the hero also has a "Contact" button.
+    Finder inHeader(String label) => find.descendant(
+      of: find.byType(SiteHeader),
+      matching: find.text(label),
+    );
     for (final label in [
       'Projects',
       'Ecosystem',
@@ -39,7 +46,7 @@ void main() {
       'Timeline',
       'Contact',
     ]) {
-      expect(find.text(label), findsOneWidget);
+      expect(inHeader(label), findsOneWidget);
     }
     expect(find.byTooltip('Open menu'), findsNothing);
 
@@ -82,7 +89,13 @@ void main() {
   });
 
   testWidgets('deep link opens directly at the section', (tester) async {
-    await pumpApp(tester, initialLocation: '/skills');
+    // Height 600: the Skills body is still a placeholder shorter than 35% of a
+    // 900px viewport, so the spy would correctly report Timeline instead.
+    await pumpApp(
+      tester,
+      size: const Size(1440, 600),
+      initialLocation: '/skills',
+    );
     expect(cubitOf(tester).state.active, SectionId.skills);
     expect(find.text('Architecture first. Stores last.'), findsOneWidget);
   });
@@ -99,6 +112,10 @@ void main() {
 
     await tester.tap(find.byTooltip('Open menu'));
     await tester.pumpAndSettle();
+    Finder inMenu(String label) => find.descendant(
+      of: find.byType(CompactMenuPanel),
+      matching: find.text(label),
+    );
     for (final label in [
       'Projects',
       'Ecosystem',
@@ -106,10 +123,10 @@ void main() {
       'Timeline',
       'Contact',
     ]) {
-      expect(find.text(label), findsOneWidget);
+      expect(inMenu(label), findsOneWidget);
     }
 
-    await tester.tap(find.text('Contact'));
+    await tester.tap(inMenu('Contact'));
     await tester.pumpAndSettle();
     expect(find.text('Projects'), findsNothing);
     expect(cubitOf(tester).state.active, SectionId.contact);
