@@ -1,0 +1,79 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.0
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - run: flutter analyze
+
+      - run: flutter test
+
+      - name: Compute base href
+        id: base
+        env:
+          REPO: ${{ github.event.repository.name }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          repo_lc="$(echo "$REPO" | tr '[:upper:]' '[:lower:]')"
+          owner_lc="$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')"
+          if [ "$repo_lc" = "${owner_lc}.github.io" ]; then
+            echo "href=/" >> "$GITHUB_OUTPUT"
+          else
+            echo "href=/${REPO}/" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build web (WASM)
+        run: flutter build web --release --wasm --base-href "${{ steps.base.outputs.href }}"
+
+      - name: SPA fallback and Jekyll bypass
+        run: |
+          cp build/web/index.html build/web/404.html
+          touch build/web/.nojekyll
+
+      - uses: actions/configure-pages@v6
+        if: github.event_name != 'pull_request'
+
+      - uses: actions/upload-pages-artifact@v5
+        if: github.event_name != 'pull_request'
+        with:
+          path: build/web
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
