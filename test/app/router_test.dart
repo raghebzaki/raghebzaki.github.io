@@ -30,9 +30,9 @@ void main() {
   testWidgets('desktop shows inline nav and scrolls to Timeline', (
     tester,
   ) async {
-    // Height 600 (not 900): the placeholder section bodies are still short, so
-    // on a taller viewport "Timeline" cannot reach the top and the page ends
-    // at the bottom, where the spy correctly reports Contact.
+    // Height 600 (not 900): the Timeline body is still a short placeholder, so
+    // on a taller viewport it cannot reach the top and the page ends at the
+    // bottom, where the spy correctly reports Contact.
     await pumpApp(tester, size: const Size(1440, 600));
     // Scoped to the header: the hero also has a "Contact" button.
     Finder inHeader(String label) => find.descendant(
@@ -80,7 +80,7 @@ void main() {
         null,
       ),
     );
-    await pumpApp(tester, size: const Size(1440, 600));
+    await pumpApp(tester, size: const Size(1440, 900));
     written.clear();
     await tester.tap(find.text('Skills'));
     await tester.pumpAndSettle();
@@ -89,11 +89,9 @@ void main() {
   });
 
   testWidgets('deep link opens directly at the section', (tester) async {
-    // Height 600: the Skills body is still a placeholder shorter than 35% of a
-    // 900px viewport, so the spy would correctly report Timeline instead.
     await pumpApp(
       tester,
-      size: const Size(1440, 600),
+      size: const Size(1440, 900),
       initialLocation: '/skills',
     );
     expect(cubitOf(tester).state.active, SectionId.skills);

@@ -150,6 +150,28 @@ abstract final class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
+  static const TextStyle layerName = TextStyle(
+    fontFamily: AppFonts.sans,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+  );
+
+  static const TextStyle layerDetail = TextStyle(
+    fontFamily: AppFonts.mono,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 12,
+    color: AppColors.cyan300,
+  );
+
+  static const TextStyle flowStep = TextStyle(
+    fontFamily: AppFonts.mono,
+    fontFamilyFallback: AppFonts.fallback,
+    fontSize: 13,
+    color: AppColors.textEmphasis,
+  );
+
   // Phone mockup labels (decorative).
   static const TextStyle mockStoreTitle = TextStyle(
     fontFamily: AppFonts.sans,

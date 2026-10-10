@@ -8,6 +8,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../contact/contact_section.dart';
+import '../ecosystem/cubit/ecosystem_filter_cubit.dart';
 import '../ecosystem/ecosystem_section.dart';
 import '../hero/hero_section.dart';
 import '../projects/projects_section.dart';
@@ -54,6 +55,10 @@ class _PortfolioPageState extends State<PortfolioPage> {
 
   late final NavigationCubit _cubit = context.read<NavigationCubit>();
 
+  /// Lives here, not in the ecosystem section: the list drops off-screen
+  /// sections, which would otherwise reset the filter.
+  final _ecosystemFilter = EcosystemFilterCubit();
+
   @override
   void initState() {
     super.initState();
@@ -78,6 +83,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
     _scrolled.dispose();
     _menuOpen.dispose();
     _pageFocus.dispose();
+    unawaited(_ecosystemFilter.close());
     super.dispose();
   }
 
@@ -213,53 +219,59 @@ class _PortfolioPageState extends State<PortfolioPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<NavigationCubit, NavigationState>(
-          listenWhen: (previous, current) =>
-              previous.requestId != current.requestId && current.target != null,
-          listener: (context, state) => unawaited(_handleScrollRequest(state)),
-        ),
-        BlocListener<NavigationCubit, NavigationState>(
-          listenWhen: (previous, current) => previous.active != current.active,
-          listener: (context, state) => _syncUrl(state.active),
-        ),
-      ],
-      child: Focus(
-        focusNode: _pageFocus,
-        autofocus: true,
-        onKeyEvent: _onKey,
-        child: Scaffold(
-          backgroundColor: AppColors.background,
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SiteHeader(scrolled: _scrolled, menuOpen: _menuOpen),
-              Expanded(
-                child: Stack(
-                  key: _listAreaKey,
-                  fit: StackFit.expand,
-                  children: [
-                    Positioned.fill(
-                      child: SelectionArea(
-                        child: ScrollablePositionedList.builder(
-                          itemCount: SectionId.values.length,
-                          initialScrollIndex: widget.routeSection.index,
-                          itemScrollController: _itemScrollController,
-                          itemPositionsListener: _itemPositionsListener,
-                          scrollOffsetController: _scrollOffsetController,
-                          itemBuilder: _buildSection,
+    return BlocProvider<EcosystemFilterCubit>.value(
+      value: _ecosystemFilter,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<NavigationCubit, NavigationState>(
+            listenWhen: (previous, current) =>
+                previous.requestId != current.requestId &&
+                current.target != null,
+            listener: (context, state) =>
+                unawaited(_handleScrollRequest(state)),
+          ),
+          BlocListener<NavigationCubit, NavigationState>(
+            listenWhen: (previous, current) =>
+                previous.active != current.active,
+            listener: (context, state) => _syncUrl(state.active),
+          ),
+        ],
+        child: Focus(
+          focusNode: _pageFocus,
+          autofocus: true,
+          onKeyEvent: _onKey,
+          child: Scaffold(
+            backgroundColor: AppColors.background,
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SiteHeader(scrolled: _scrolled, menuOpen: _menuOpen),
+                Expanded(
+                  child: Stack(
+                    key: _listAreaKey,
+                    fit: StackFit.expand,
+                    children: [
+                      Positioned.fill(
+                        child: SelectionArea(
+                          child: ScrollablePositionedList.builder(
+                            itemCount: SectionId.values.length,
+                            initialScrollIndex: widget.routeSection.index,
+                            itemScrollController: _itemScrollController,
+                            itemPositionsListener: _itemPositionsListener,
+                            scrollOffsetController: _scrollOffsetController,
+                            itemBuilder: _buildSection,
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned.fill(
-                      child: CompactMenuPanel(menuOpen: _menuOpen),
-                    ),
-                    Offstage(child: widget.child),
-                  ],
+                      Positioned.fill(
+                        child: CompactMenuPanel(menuOpen: _menuOpen),
+                      ),
+                      Offstage(child: widget.child),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

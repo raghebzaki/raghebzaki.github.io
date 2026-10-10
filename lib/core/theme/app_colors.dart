@@ -75,6 +75,11 @@ abstract final class AppColors {
   static const Color heroGlowBlueEnd = Color(0x003B82F6);
   static const Color gridLineEnd = Color(0x0094A3B8);
   static const Color chipScBorder = Color(0x5960A5FA); // .35
+  static const Color ecosystemGlow = Color(0x2422D3EE); // cyan .14
+  static const Color layerSkyBorder = Color(0x4D38BDF8); // .30
+  static const Color layerBlueBorder = Color(0x4D60A5FA); // .30
+  static const Color flowActiveFill = Color(0x1A22D3EE); // .10
+  static const Color flowActiveBorder = Color(0x6622D3EE); // .40
 }
 
 /// Design tokens: gradients.
@@ -119,6 +124,14 @@ abstract final class AppGradients {
   static const LinearGradient text = LinearGradient(
     colors: textColors,
     stops: textStops,
+  );
+
+  /// CSS `radial-gradient(circle, cyan .14, transparent 70%)` on a square
+  /// (farthest-corner radius = 0.7071 of the side).
+  static const RadialGradient ecosystemGlow = RadialGradient(
+    radius: 0.7071,
+    colors: [AppColors.ecosystemGlow, AppColors.heroGlowCyanEnd],
+    stops: [0.0, 0.7],
   );
 
   static const LinearGradient surfaceCard = LinearGradient(

@@ -4,10 +4,12 @@ import 'package:flutter/painting.dart';
 /// Design tokens: spacing scale.
 abstract final class AppSpacing {
   static const double s4 = 4;
+  static const double s5 = 5;
   static const double s6 = 6;
   static const double s8 = 8;
   static const double s10 = 10;
   static const double s12 = 12;
+  static const double s14 = 14;
   static const double s16 = 16;
   static const double s20 = 20;
   static const double s24 = 24;
@@ -90,10 +92,34 @@ abstract final class AppLayout {
   static const double notchHeight = 17;
   static const double notchTop = 9;
 
+  /// Ecosystem card.
+  static const double ecosystemHeaderMax = 560;
+  static const double ecosystemGlowSize = 420;
+  static const double ecosystemGlowTop = -120;
+  static const double ecosystemGlowRight = -80;
+  static const double chipMinHeight = 36;
+  static const double chipLift = 2;
+
+  /// Skills grid.
+  static const double skillMinTile = 380;
+  static const double skillCardPadding = 28;
+  static const double skillCardMinHeight = 300;
+  static const double skillBarsHeight = 56;
+  static const double skillLayerIndent = 14;
+
   /// Vertical section paddings from the prototype.
   static const double projectsTop = 96;
   static const double defaultTop = 112;
   static const double footerBottom = 48;
+}
+
+/// Design tokens: opacities.
+abstract final class AppOpacity {
+  /// Filtered-out ecosystem chips.
+  static const double chipDimmed = 0.16;
+
+  /// Count next to a filter label.
+  static const double filterCount = 0.6;
 }
 
 /// Design tokens: animation durations.

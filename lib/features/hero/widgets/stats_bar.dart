@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../domain/entities/profile.dart';
+import '../../../shared/widgets/equal_height_row.dart';
 import 'animated_stat_value.dart';
 
 /// Number of columns for the stats bar: all [count] in one row, or one column
@@ -65,18 +66,10 @@ class _StatsBarState extends State<StatsBar> {
                   for (final stat in stats) _StatCell(stat, animate: _animate),
                 ];
                 if (row) {
-                  // Cells hold identical content structure, so their heights
-                  // match; GradientText's LayoutBuilder rules out
-                  // IntrinsicHeight here.
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (var i = 0; i < cells.length; i++) ...[
-                        if (i > 0) const SizedBox(width: 1),
-                        Expanded(child: cells[i]),
-                      ],
-                    ],
-                  );
+                  // Equal-height cells without IntrinsicHeight (which
+                  // GradientText's LayoutBuilder rules out); the 1px gap
+                  // shows the frame colour as the divider.
+                  return EqualHeightRow(gap: 1, children: cells);
                 }
                 return Column(
                   mainAxisSize: MainAxisSize.min,
