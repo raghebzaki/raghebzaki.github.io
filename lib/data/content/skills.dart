@@ -1,49 +1,86 @@
 import '../../domain/entities/skill.dart';
 
-const skills = <SkillTile>[
-  SkillTile(
-    id: 'clean-architecture',
-    title: 'Clean Architecture',
-    visual: LayerStack(
-      layers: [
-        SkillLayer(name: 'Presentation', detail: 'UI · State'),
-        SkillLayer(name: 'Domain', detail: 'Entities · Use cases'),
-        SkillLayer(name: 'Data', detail: 'Repos · Sources'),
-      ],
-    ),
+const skills = <SkillCategory>[
+  SkillCategory(
+    id: 'architecture',
+    title: 'State Management & Architecture',
+    subtitle: 'Scalable Architecture & Reactive State',
+    description:
+        'Architecting modular enterprise codebases with decoupled business '
+        'logic and strict design patterns.',
+    skills: [
+      'Clean Architecture',
+      'BLoC',
+      'Cubit',
+      'Provider',
+      'SOLID Principles',
+      'Design Patterns',
+      'Modular Architecture',
+      'Repository Pattern',
+    ],
+    tone: SkillTone.cyan,
+    glyph: SkillGlyph.architecture,
   ),
-  SkillTile(
-    id: 'bloc-cubit',
-    title: 'BLoC / Cubit',
-    visual: StateFlow(
-      steps: ['Event', 'Bloc', 'State'],
-      activeIndex: 1,
-      caption: 'Predictable, testable state across every screen.',
-    ),
+  SkillCategory(
+    id: 'data',
+    title: 'Database & Data Persistence',
+    subtitle: 'Local Storage & Offline Engines',
+    description:
+        'Secure device-level data persistence paired with resilient '
+        'offline-first synchronization.',
+    skills: [
+      'SQLite',
+      'Hive',
+      'Floor',
+      'Shared Preferences',
+      'Secure Storage',
+      'Offline Sync & Caching',
+      'Encrypted Storage',
+    ],
+    tone: SkillTone.blue,
+    glyph: SkillGlyph.database,
   ),
-  SkillTile(
-    id: 'apis-realtime',
-    title: 'APIs & Real-Time',
-    visual: TagPulse(
-      hotTags: ['REST', 'WebSockets'],
-      neutralTags: ['JSON', 'Live updates'],
-      bars: [
-        SkillBar(height: 18),
-        SkillBar(height: 30),
-        SkillBar(height: 48, highlighted: true),
-        SkillBar(height: 26),
-        SkillBar(height: 38, highlighted: true),
-        SkillBar(height: 22),
-        SkillBar(height: 52, highlighted: true),
-        SkillBar(height: 32),
-      ],
-    ),
+  SkillCategory(
+    id: 'backend',
+    title: 'Backend Integration & Real-Time',
+    subtitle: 'Resilient Networking & APIs',
+    description:
+        'Robust API pipelines with custom interceptors, automated token '
+        'refresh, and live WebSocket streaming.',
+    skills: [
+      'REST APIs',
+      'Dio',
+      'HTTP',
+      'WebSockets',
+      'Firebase (FCM, Auth)',
+      'JSON Serialization',
+      'Interceptors',
+    ],
+    tone: SkillTone.indigo,
+    glyph: SkillGlyph.network,
   ),
-  SkillTile(
-    id: 'devops-stores',
-    title: 'DevOps & Stores',
-    visual: StoreGrid(
-      stores: ['Play Store', 'App Store', 'Huawei AppGallery', 'Windows'],
-    ),
+  SkillCategory(
+    id: 'delivery',
+    title: 'DevOps, Testing & Deployment',
+    subtitle: 'Automated Delivery & Ecosystem',
+    description:
+        'End-to-end continuous integration, automated store code signing, '
+        'and live Over-The-Air patching.',
+    skills: [
+      'GitHub Actions',
+      'Git & GitHub',
+      'Fastlane',
+      'Shorebird (OTA)',
+      'Unit Testing (bloc_test)',
+      'Widget Testing',
+      'Google Play Console',
+      'App Store Connect',
+      'Huawei AppGallery',
+      'Postman',
+      'Swagger',
+      'Figma',
+    ],
+    tone: SkillTone.amber,
+    glyph: SkillGlyph.delivery,
   ),
 ];

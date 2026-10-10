@@ -23,7 +23,7 @@ class SkillsSection extends StatelessWidget {
             SectionId.skills,
             'Architecture first. Stores last.',
           ),
-          SkillsGrid(tiles: skills),
+          SkillsGrid(categories: skills),
         ],
       ),
     );

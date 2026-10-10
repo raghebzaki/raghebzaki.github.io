@@ -1,22 +1,48 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ragheb_portfolio/core/theme/app_colors.dart';
 import 'package:ragheb_portfolio/core/theme/app_spacing.dart';
 import 'package:ragheb_portfolio/data/static_portfolio_repository.dart';
 import 'package:ragheb_portfolio/domain/entities/skill.dart';
 import 'package:ragheb_portfolio/features/shell/section_id.dart';
-import 'package:ragheb_portfolio/features/skills/widgets/skill_card.dart';
+import 'package:ragheb_portfolio/features/skills/widgets/skill_category_card.dart';
+import 'package:ragheb_portfolio/features/skills/widgets/skill_icon_badge.dart';
+import 'package:ragheb_portfolio/features/skills/widgets/skill_pill.dart';
+import 'package:ragheb_portfolio/features/skills/widgets/skill_tone_style.dart';
 import 'package:ragheb_portfolio/features/skills/widgets/skills_grid.dart';
-import 'package:ragheb_portfolio/shared/widgets/glow_card.dart';
+import 'package:ragheb_portfolio/shared/widgets/app_icon.dart';
 
 import '../../support/app_harness.dart';
 import '../../support/settle.dart';
 
-final tiles = const StaticPortfolioRepository().skills;
+final categories = const StaticPortfolioRepository().skills;
 
-Finder card(int i) => find.byType(SkillCard).at(i);
+Finder card(int i) => find.byType(SkillCategoryCard).at(i);
+
+Finder pill(String label) => find.widgetWithText(SkillPill, label);
+
+BoxDecoration pillDecoration(WidgetTester tester, Finder pillFinder) {
+  final container = tester.widget<AnimatedContainer>(
+    find.descendant(of: pillFinder, matching: find.byType(AnimatedContainer)),
+  );
+  return container.decoration! as BoxDecoration;
+}
 
 void main() {
+  // Regression (seen in the browser): pills stretched to the full card width,
+  // one per row, instead of wrapping as compact chips.
+  testWidgets('skill pills shrink-wrap and share rows', (tester) async {
+    await pumpSection(tester, SectionId.skills, size: const Size(1440, 1800));
+    final pills = find.byType(SkillPill);
+    expect(pills, findsWidgets);
+    final card = tester.getRect(find.byType(SkillCategoryCard).first);
+    final first = tester.getRect(pills.first);
+    final second = tester.getRect(pills.at(1));
+    expect(first.width, lessThan(card.width / 2));
+    expect(second.top, first.top, reason: 'first two pills share a row');
+  });
+
   setUpAll(loadAppFonts);
 
   group('pure logic', () {
@@ -29,59 +55,145 @@ void main() {
         expect(skillsColumns(w), inInclusiveRange(1, 2), reason: '$w');
       }
     });
+
+    test('toneStyle returns each tone accent and distinct values', () {
+      expect(toneStyle(SkillTone.cyan).accent, AppColors.cyan400);
+      expect(toneStyle(SkillTone.blue).accent, AppColors.blue400);
+      expect(toneStyle(SkillTone.indigo).accent, AppColors.indigo400);
+      expect(toneStyle(SkillTone.amber).accent, AppColors.amber400);
+      expect(toneStyle(SkillTone.cyan).soft, AppColors.cyan300);
+      expect(toneStyle(SkillTone.blue).soft, AppColors.blue300);
+      expect(toneStyle(SkillTone.indigo).soft, AppColors.indigo300);
+      expect(toneStyle(SkillTone.amber).soft, AppColors.amber300);
+      final styles = SkillTone.values.map(toneStyle).toList();
+      for (final pick in <Object Function(SkillToneStyle)>[
+        (s) => s.accent,
+        (s) => s.soft,
+        (s) => s.badgeFill,
+        (s) => s.badgeBorder,
+        (s) => s.hoverBorder,
+        (s) => s.hoverFill,
+        (s) => s.hoverGlow.color,
+      ]) {
+        expect(styles.map(pick).toSet(), hasLength(SkillTone.values.length));
+      }
+      for (final style in styles) {
+        expect(style.hoverGlow.blurRadius, 14);
+        expect(style.hoverGlow.spreadRadius, -2);
+      }
+    });
+
+    test('glyphs map to their icons', () {
+      expect(skillGlyphIcon(SkillGlyph.architecture), AppIcon.layers);
+      expect(skillGlyphIcon(SkillGlyph.database), AppIcon.database);
+      expect(skillGlyphIcon(SkillGlyph.network), AppIcon.zap);
+      expect(skillGlyphIcon(SkillGlyph.delivery), AppIcon.rocket);
+      for (final glyph in SkillGlyph.values) {
+        expect(skillGlyphIcon(glyph).assetPath, endsWith('.svg'));
+      }
+    });
   });
 
   group('content', () {
-    test('four tiles with the expected titles and visuals', () {
-      expect(tiles.map((t) => t.title), [
-        'Clean Architecture',
-        'BLoC / Cubit',
-        'APIs & Real-Time',
-        'DevOps & Stores',
+    test('four categories with exact copy, in order', () {
+      expect(categories.map((c) => c.id), [
+        'architecture',
+        'data',
+        'backend',
+        'delivery',
       ]);
-      expect(tiles.map((t) => t.id).toSet(), hasLength(4));
-      expect(tiles[0].visual, isA<LayerStack>());
-      expect(tiles[1].visual, isA<StateFlow>());
-      expect(tiles[2].visual, isA<TagPulse>());
-      expect(tiles[3].visual, isA<StoreGrid>());
+      expect(categories.map((c) => c.title), [
+        'State Management & Architecture',
+        'Database & Data Persistence',
+        'Backend Integration & Real-Time',
+        'DevOps, Testing & Deployment',
+      ]);
+      expect(categories.map((c) => c.subtitle), [
+        'Scalable Architecture & Reactive State',
+        'Local Storage & Offline Engines',
+        'Resilient Networking & APIs',
+        'Automated Delivery & Ecosystem',
+      ]);
+      expect(categories.map((c) => c.description), [
+        'Architecting modular enterprise codebases with decoupled business '
+            'logic and strict design patterns.',
+        'Secure device-level data persistence paired with resilient '
+            'offline-first synchronization.',
+        'Robust API pipelines with custom interceptors, automated token '
+            'refresh, and live WebSocket streaming.',
+        'End-to-end continuous integration, automated store code signing, '
+            'and live Over-The-Air patching.',
+      ]);
     });
 
-    test('visuals are well formed', () {
-      final layers = tiles[0].visual as LayerStack;
-      expect(layers.layers, hasLength(3));
-      for (final layer in layers.layers) {
-        expect(layer.name, isNotEmpty);
-        expect(layer.detail, isNotEmpty);
+    test('exact skill lists', () {
+      expect(categories[0].skills, [
+        'Clean Architecture',
+        'BLoC',
+        'Cubit',
+        'Provider',
+        'SOLID Principles',
+        'Design Patterns',
+        'Modular Architecture',
+        'Repository Pattern',
+      ]);
+      expect(categories[1].skills, [
+        'SQLite',
+        'Hive',
+        'Floor',
+        'Shared Preferences',
+        'Secure Storage',
+        'Offline Sync & Caching',
+        'Encrypted Storage',
+      ]);
+      expect(categories[2].skills, [
+        'REST APIs',
+        'Dio',
+        'HTTP',
+        'WebSockets',
+        'Firebase (FCM, Auth)',
+        'JSON Serialization',
+        'Interceptors',
+      ]);
+      expect(categories[3].skills, [
+        'GitHub Actions',
+        'Git & GitHub',
+        'Fastlane',
+        'Shorebird (OTA)',
+        'Unit Testing (bloc_test)',
+        'Widget Testing',
+        'Google Play Console',
+        'App Store Connect',
+        'Huawei AppGallery',
+        'Postman',
+        'Swagger',
+        'Figma',
+      ]);
+      expect(categories.map((c) => c.skills.length), [8, 7, 7, 12]);
+      for (final c in categories) {
+        expect(c.skills.toSet(), hasLength(c.skills.length), reason: c.id);
       }
-      final flow = tiles[1].visual as StateFlow;
-      expect(flow.steps, ['Event', 'Bloc', 'State']);
-      expect(flow.activeIndex, inInclusiveRange(0, flow.steps.length - 1));
-      expect(flow.caption, isNotEmpty);
-      final pulse = tiles[2].visual as TagPulse;
-      expect(pulse.hotTags, ['REST', 'WebSockets']);
-      expect(pulse.neutralTags, ['JSON', 'Live updates']);
-      expect(pulse.bars, hasLength(8));
-      expect(pulse.bars.where((b) => b.highlighted), hasLength(3));
-      final stores = tiles[3].visual as StoreGrid;
-      expect(stores.stores, hasLength(4));
+    });
+
+    test('tones and glyphs', () {
+      expect(categories.map((c) => c.tone), SkillTone.values);
+      expect(categories.map((c) => c.glyph), SkillGlyph.values);
     });
   });
 
   group('layout', () {
-    testWidgets('1440: 2x2, rows equally tall, at least 300', (tester) async {
+    testWidgets('1440: 2x2 with equal-height rows', (tester) async {
       await pumpSection(tester, SectionId.skills);
-      expect(find.byType(SkillCard), findsNWidgets(4));
+      expect(find.byType(SkillCategoryCard), findsNWidgets(4));
       final r = [for (var i = 0; i < 4; i++) tester.getRect(card(i))];
-      expect(r[1].top, r[0].top);
-      expect(r[3].top, r[2].top);
-      expect(r[2].top, greaterThan(r[0].bottom));
-      expect(r[2].top - r[0].bottom, AppLayout.gridGap);
-      expect(r[1].left - r[0].right, AppLayout.gridGap);
-      expect(r[1].height, r[0].height);
-      expect(r[3].height, r[2].height);
+      expect(r[1].top, closeTo(r[0].top, 0.5));
+      expect(r[3].top, closeTo(r[2].top, 0.5));
+      expect(r[2].top - r[0].bottom, closeTo(AppLayout.gridGap, 0.5));
+      expect(r[1].left - r[0].right, closeTo(AppLayout.gridGap, 0.5));
+      expect(r[1].height, closeTo(r[0].height, 0.5));
+      expect(r[3].height, closeTo(r[2].height, 0.5));
       for (final rect in r) {
-        expect(rect.height, greaterThanOrEqualTo(300));
-        expect(rect.width, closeTo(r[0].width, 0.01));
+        expect(rect.width, closeTo(r[0].width, 0.5));
       }
     });
 
@@ -107,151 +219,159 @@ void main() {
       });
     }
 
-    testWidgets('diagram sits at the bottom of the card', (tester) async {
-      await pumpSection(tester, SectionId.skills);
-      // Card 1 (flow) is shorter than its row mate?  Whichever is shorter
-      // must still end its content at the bottom padding.
-      for (var i = 0; i < 4; i++) {
-        final cardRect = tester.getRect(card(i));
-        final content = tester.getRect(
-          find.descendant(of: card(i), matching: find.byType(Column)).first,
-        );
-        expect(
-          cardRect.bottom - content.bottom,
-          closeTo(AppLayout.skillCardPadding, 0.01),
-          reason: 'card $i',
-        );
-      }
-    });
-  });
-
-  group('visuals', () {
-    testWidgets('layer indents are 0 / 14 / 28', (tester) async {
-      await pumpSection(tester, SectionId.skills);
-      final left = [
-        for (var i = 0; i < 3; i++)
-          tester
-              .getTopLeft(
-                find.descendant(
-                  of: card(0),
-                  matching: find.byKey(ValueKey('layer-$i')),
-                ),
-              )
-              .dx,
-      ];
-      expect(left[1] - left[0], 14);
-      expect(left[2] - left[0], 28);
-      final right = [
-        for (var i = 0; i < 3; i++)
-          tester
-              .getTopRight(
-                find.descendant(
-                  of: card(0),
-                  matching: find.byKey(ValueKey('layer-$i')),
-                ),
-              )
-              .dx,
-      ];
-      expect(right[0] - right[1], 14);
-      expect(right[0] - right[2], 28);
-    });
-
-    testWidgets('flow steps are in order Event -> Bloc -> State', (
-      tester,
-    ) async {
-      await pumpSection(tester, SectionId.skills);
-      final xs = [
-        for (final step in ['Event', 'Bloc', 'State'])
-          tester
-              .getTopLeft(
-                find.descendant(of: card(1), matching: find.text(step)),
-              )
-              .dx,
-      ];
-      expect(xs[0], lessThan(xs[1]));
-      expect(xs[1], lessThan(xs[2]));
-      expect(
-        find.descendant(
-          of: card(1),
-          matching: find.text(
-            'Predictable, testable state across every screen.',
-          ),
-        ),
-        findsOneWidget,
-      );
-    });
-
-    testWidgets('four store tiles', (tester) async {
-      await pumpSection(tester, SectionId.skills);
-      for (final store in [
-        'Play Store',
-        'App Store',
-        'Huawei AppGallery',
-        'Windows',
-      ]) {
-        expect(
-          find.descendant(of: card(3), matching: find.text(store)),
-          findsOneWidget,
-        );
-      }
-    });
-
-    testWidgets('API tags are shown', (tester) async {
-      await pumpSection(tester, SectionId.skills);
-      for (final tag in ['REST', 'WebSockets', 'JSON', 'Live updates']) {
-        expect(
-          find.descendant(of: card(2), matching: find.text(tag)),
-          findsOneWidget,
-        );
-      }
-    });
-  });
-
-  group('no overflow', () {
     for (final width in [360.0, 768.0, 1024.0, 1440.0]) {
       for (final scale in [1.0, 1.5]) {
-        testWidgets('${width.toInt()}px at ${scale}x text', (tester) async {
+        testWidgets('no overflow at ${width.toInt()}px, ${scale}x text', (
+          tester,
+        ) async {
           tester.platformDispatcher.textScaleFactorTestValue = scale;
           addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
           await pumpSection(tester, SectionId.skills, size: Size(width, 900));
           expect(tester.takeException(), isNull);
-          final rects = [for (var i = 0; i < 4; i++) tester.getRect(card(i))];
-          for (final r in rects) {
-            expect(r.height, greaterThanOrEqualTo(300));
-          }
         });
       }
     }
   });
 
-  testWidgets('hover highlights a skills card through GlowCard', (
-    tester,
-  ) async {
-    await pumpSection(tester, SectionId.skills);
-    Color border() {
-      final container = tester.widget<AnimatedContainer>(
-        find
-            .descendant(
-              of: find.byType(GlowCard).first,
-              matching: find.byType(AnimatedContainer),
-            )
-            .first,
-      );
-      return ((container.foregroundDecoration! as BoxDecoration).border!
-              as Border)
-          .top
-          .color;
+  group('rendering', () {
+    testWidgets('every title, subtitle, description and skill is shown', (
+      tester,
+    ) async {
+      await pumpSection(tester, SectionId.skills);
+      for (var i = 0; i < categories.length; i++) {
+        final c = categories[i];
+        for (final text in [c.title, c.subtitle, c.description]) {
+          expect(
+            find.descendant(of: card(i), matching: find.text(text)),
+            findsOneWidget,
+            reason: text,
+          );
+        }
+        for (final skill in c.skills) {
+          expect(
+            find.descendant(of: card(i), matching: find.text(skill)),
+            findsOneWidget,
+            reason: skill,
+          );
+        }
+        expect(
+          find.descendant(of: card(i), matching: find.byType(SkillPill)),
+          findsNWidgets(c.skills.length),
+        );
+      }
+      expect(find.byType(SkillPill), findsNWidgets(34));
+    });
+
+    testWidgets('each card has its icon badge', (tester) async {
+      await pumpSection(tester, SectionId.skills);
+      const icons = [
+        AppIcon.layers,
+        AppIcon.database,
+        AppIcon.zap,
+        AppIcon.rocket,
+      ];
+      for (var i = 0; i < 4; i++) {
+        final badge = find.descendant(
+          of: card(i),
+          matching: find.byType(SkillIconBadge),
+        );
+        expect(badge, findsOneWidget);
+        expect(tester.widget<SkillIconBadge>(badge).tone, categories[i].tone);
+        final icon = tester.widget<AppIconView>(
+          find.descendant(of: badge, matching: find.byType(AppIconView)),
+        );
+        expect(icon.icon, icons[i]);
+        expect(icon.color, toneStyle(categories[i].tone).accent);
+        expect(tester.getSize(badge), const Size.square(48));
+      }
+    });
+
+    testWidgets('titles are semantic headers', (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpSection(tester, SectionId.skills);
+      for (final c in categories) {
+        expect(
+          tester.getSemantics(find.text(c.title)),
+          matchesSemantics(label: c.title, isHeader: true),
+        );
+      }
+      handle.dispose();
+    });
+
+    testWidgets('the old diagram widgets are gone', (tester) async {
+      await pumpSection(tester, SectionId.skills);
+      for (final name in [
+        'LayerStackView',
+        'StateFlowView',
+        'TagPulseView',
+        'StoreGridView',
+        'SkillCard',
+      ]) {
+        expect(
+          find.byWidgetPredicate((w) => w.runtimeType.toString() == name),
+          findsNothing,
+          reason: name,
+        );
+      }
+    });
+  });
+
+  group('hover', () {
+    Future<TestGesture> mouse(WidgetTester tester) async {
+      final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      await gesture.addPointer(location: const Offset(2, 2));
+      addTearDown(gesture.removePointer);
+      return gesture;
     }
 
-    final before = border();
-    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
-    await mouse.addPointer(location: Offset.zero);
-    addTearDown(mouse.removePointer);
-    await mouse.moveTo(tester.getCenter(card(0)));
-    await settle(tester);
-    expect(border(), isNot(before));
-    await mouse.moveTo(const Offset(2, 2));
-    await settle(tester);
-    expect(border(), before);
+    testWidgets('hovering a pill shows the tone border, fill and glow', (
+      tester,
+    ) async {
+      await pumpSection(tester, SectionId.skills, size: const Size(1440, 1800));
+      final target = pill('Dio');
+      final style = toneStyle(SkillTone.indigo);
+      var decoration = pillDecoration(tester, target);
+      final restBorder = (decoration.border! as Border).top.color;
+      expect(restBorder, AppColors.borderTag);
+      expect(decoration.boxShadow, isEmpty);
+
+      final gesture = await mouse(tester);
+      await gesture.moveTo(tester.getCenter(target));
+      await settle(tester);
+      decoration = pillDecoration(tester, target);
+      expect((decoration.border! as Border).top.color, style.hoverBorder);
+      expect(decoration.color, style.hoverFill);
+      expect(decoration.boxShadow, [style.hoverGlow]);
+
+      await gesture.moveTo(const Offset(2, 2));
+      await settle(tester);
+      decoration = pillDecoration(tester, target);
+      expect((decoration.border! as Border).top.color, restBorder);
+      expect(decoration.boxShadow, isEmpty);
+    });
+
+    testWidgets('with disableAnimations the change is immediate', (
+      tester,
+    ) async {
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+      await pumpSection(tester, SectionId.skills);
+      final target = pill('Hive');
+      final gesture = await mouse(tester);
+      await gesture.moveTo(tester.getCenter(target));
+      await tester.pump();
+      final decoration = pillDecoration(tester, target);
+      expect(
+        (decoration.border! as Border).top.color,
+        toneStyle(SkillTone.blue).hoverBorder,
+      );
+      expect(decoration.boxShadow, isNotEmpty);
+      await gesture.moveTo(const Offset(2, 2));
+      await tester.pump();
+      expect(pillDecoration(tester, target).boxShadow, isEmpty);
+    });
   });
 }

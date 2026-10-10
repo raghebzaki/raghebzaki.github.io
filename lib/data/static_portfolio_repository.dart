@@ -25,7 +25,7 @@ final class StaticPortfolioRepository implements PortfolioRepository {
   Ecosystem get ecosystem => content.ecosystem;
 
   @override
-  List<SkillTile> get skills => content.skills;
+  List<SkillCategory> get skills => content.skills;
 
   @override
   List<Experience> get experience => content.experience;

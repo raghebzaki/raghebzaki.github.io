@@ -52,14 +52,6 @@ abstract final class AppTextStyles {
     color: AppColors.textSecondary,
   );
 
-  static const TextStyle bodySmall = TextStyle(
-    fontFamily: AppFonts.sans,
-    fontFamilyFallback: AppFonts.fallback,
-    fontSize: 14,
-    height: 1.6,
-    color: AppColors.textSecondary,
-  );
-
   static const TextStyle caption = TextStyle(
     fontFamily: AppFonts.sans,
     fontFamilyFallback: AppFonts.fallback,
@@ -166,25 +158,21 @@ abstract final class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
-  static const TextStyle layerName = TextStyle(
+  /// Subtitle under a skill category title (colour applied per tone).
+  static const TextStyle skillSubtitle = TextStyle(
     fontFamily: AppFonts.sans,
     fontFamilyFallback: AppFonts.fallback,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: FontWeight.w500,
-    color: AppColors.textPrimary,
+    color: AppColors.textSecondary,
   );
 
-  static const TextStyle layerDetail = TextStyle(
-    fontFamily: AppFonts.mono,
-    fontFamilyFallback: AppFonts.fallback,
-    fontSize: 12,
-    color: AppColors.cyan300,
-  );
-
-  static const TextStyle flowStep = TextStyle(
-    fontFamily: AppFonts.mono,
+  /// Skill pill label.
+  static const TextStyle skillPill = TextStyle(
+    fontFamily: AppFonts.sans,
     fontFamilyFallback: AppFonts.fallback,
     fontSize: 13,
+    fontWeight: FontWeight.w500,
     color: AppColors.textEmphasis,
   );
 
@@ -317,7 +305,6 @@ class AppTypography {
   TextStyle get cardTitle => AppTextStyles.cardTitle;
   TextStyle get tileTitle => AppTextStyles.tileTitle;
   TextStyle get body => AppTextStyles.body;
-  TextStyle get bodySmall => AppTextStyles.bodySmall;
   TextStyle get caption => AppTextStyles.caption;
   TextStyle get button => AppTextStyles.button;
   TextStyle get buttonPrimary => AppTextStyles.buttonPrimary;

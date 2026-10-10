@@ -13,10 +13,13 @@ enum AppIcon {
   ledger('assets/icons/ledger.svg'),
   board('assets/icons/board.svg'),
   arrowUpRight('assets/icons/arrow_up_right.svg'),
-  arrowRight('assets/icons/arrow_right.svg'),
   copy('assets/icons/copy.svg'),
   check('assets/icons/check.svg'),
-  phone('assets/icons/phone.svg');
+  phone('assets/icons/phone.svg'),
+  layers('assets/icons/layers.svg'),
+  database('assets/icons/database.svg'),
+  zap('assets/icons/zap.svg'),
+  rocket('assets/icons/rocket.svg');
 
   const AppIcon(this.assetPath);
 

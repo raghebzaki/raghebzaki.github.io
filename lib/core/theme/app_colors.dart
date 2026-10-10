@@ -31,18 +31,20 @@ abstract final class AppColors {
   static const Color cyan400 = Color(0xFF22D3EE);
   static const Color cyan300 = Color(0xFF67E8F9);
   static const Color sky400 = Color(0xFF38BDF8);
-  static const Color sky300 = Color(0xFF7DD3FC);
   static const Color blue500 = Color(0xFF3B82F6);
   static const Color blue400 = Color(0xFF60A5FA);
   static const Color blue300 = Color(0xFF93C5FD);
   static const Color blue700 = Color(0xFF1D4ED8);
+  static const Color indigo400 = Color(0xFF818CF8);
+  static const Color indigo300 = Color(0xFFA5B4FC);
+  static const Color amber400 = Color(0xFFFBBF24);
+  static const Color amber300 = Color(0xFFFCD34D);
 
   // Status
   static const Color statusGreen = Color(0xFF22C55E);
 
   // Misc fills
   static const Color avatarFill = Color(0xFF161E2B);
-  static const Color skeleton = Color(0xFF232B38);
 
   // App-icon badge fills (accent @ .22 -> other accent)
   static const Color appIconCyanStart = Color(0x3822D3EE); // cyan400 .22
@@ -67,12 +69,35 @@ abstract final class AppColors {
   static const Color gridLineEnd = Color(0x0094A3B8);
   static const Color chipScBorder = Color(0x5960A5FA); // .35
   static const Color ecosystemGlow = Color(0x2422D3EE); // cyan .14
-  static const Color layerSkyBorder = Color(0x4D38BDF8); // .30
-  static const Color layerBlueBorder = Color(0x4D60A5FA); // .30
-  static const Color flowActiveFill = Color(0x1A22D3EE); // .10
-  static const Color flowActiveBorder = Color(0x6622D3EE); // .40
   static const Color contactGlow = Color(0x1F22D3EE); // cyan .12
   static const Color contactGlowEnd = Color(0x0022D3EE);
+  // Skill tone cyan: accent400 at .12 / .30 / .45 / .08 / .25
+  static const Color skillCyanBadgeFill = Color(0x1F22D3EE); // .12
+  static const Color skillCyanBadgeBorder = Color(0x4C22D3EE); // .30
+  static const Color skillCyanChipBorder = Color(0x7322D3EE); // .45
+  static const Color skillCyanChipFill = Color(0x1422D3EE); // .08
+  static const Color skillCyanChipGlow = Color(0x4022D3EE); // .25
+
+  // Skill tone blue: accent400 at .12 / .30 / .45 / .08 / .25
+  static const Color skillBlueBadgeFill = Color(0x1F60A5FA); // .12
+  static const Color skillBlueBadgeBorder = Color(0x4C60A5FA); // .30
+  static const Color skillBlueChipBorder = Color(0x7360A5FA); // .45
+  static const Color skillBlueChipFill = Color(0x1460A5FA); // .08
+  static const Color skillBlueChipGlow = Color(0x4060A5FA); // .25
+
+  // Skill tone indigo: accent400 at .12 / .30 / .45 / .08 / .25
+  static const Color skillIndigoBadgeFill = Color(0x1F818CF8); // .12
+  static const Color skillIndigoBadgeBorder = Color(0x4C818CF8); // .30
+  static const Color skillIndigoChipBorder = Color(0x73818CF8); // .45
+  static const Color skillIndigoChipFill = Color(0x14818CF8); // .08
+  static const Color skillIndigoChipGlow = Color(0x40818CF8); // .25
+
+  // Skill tone amber: accent400 at .12 / .30 / .45 / .08 / .25
+  static const Color skillAmberBadgeFill = Color(0x1FFBBF24); // .12
+  static const Color skillAmberBadgeBorder = Color(0x4CFBBF24); // .30
+  static const Color skillAmberChipBorder = Color(0x73FBBF24); // .45
+  static const Color skillAmberChipFill = Color(0x14FBBF24); // .08
+  static const Color skillAmberChipGlow = Color(0x40FBBF24); // .25
   static const Color timelineBullet = Color(0xB322D3EE); // cyan400 @ .7
 }
 
@@ -86,13 +111,6 @@ abstract final class AppGradients {
 
   /// Exact CSS `linear-gradient(135deg, …)` for boxes of any aspect ratio.
   static const CssLinearGradient primaryCss = CssLinearGradient(
-    colors: [AppColors.cyan400, AppColors.blue500],
-  );
-
-  /// CSS `linear-gradient(90deg, cyan400, blue500)` (highlight bars).
-  static const LinearGradient highlight = LinearGradient(
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
     colors: [AppColors.cyan400, AppColors.blue500],
   );
 

@@ -9,8 +9,8 @@ abstract interface class PortfolioRepository {
   List<Project> get featuredProjects;
   Ecosystem get ecosystem;
 
-  /// The skills bento tiles, in display order.
-  List<SkillTile> get skills;
+  /// The skill categories, in display order.
+  List<SkillCategory> get skills;
 
   /// Newest start first.
   List<Experience> get experience;

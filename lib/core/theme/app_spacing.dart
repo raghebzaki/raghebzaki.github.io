@@ -3,7 +3,6 @@ import 'package:flutter/painting.dart';
 /// Design tokens: spacing scale.
 abstract final class AppSpacing {
   static const double s4 = 4;
-  static const double s5 = 5;
   static const double s6 = 6;
   static const double s8 = 8;
   static const double s10 = 10;
@@ -94,9 +93,10 @@ abstract final class AppLayout {
   /// Skills grid.
   static const double skillMinTile = 380;
   static const double skillCardPadding = 28;
-  static const double skillCardMinHeight = 300;
-  static const double skillBarsHeight = 56;
-  static const double skillLayerIndent = 14;
+  static const double skillBadgeSize = 48;
+  static const double skillBadgeIcon = 22;
+  static const double skillPillMinHeight = 32;
+  static const double skillPillPadding = 12;
 
   /// Hero avatar (outer ring box, inner photo, status dot, halo scale).
   static const double avatarSize = 88;
