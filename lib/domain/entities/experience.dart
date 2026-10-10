@@ -34,6 +34,7 @@ class Experience extends Equatable {
     required this.highlights,
     required this.companyUrl,
     required this.monogram,
+    this.logoAsset,
   });
 
   final String company;
@@ -44,8 +45,12 @@ class Experience extends Equatable {
   /// The company's public page (LinkedIn).
   final String companyUrl;
 
-  /// Two-letter mark shown in the company badge.
+  /// Two-letter mark shown in the company badge when there is no logo (or it
+  /// fails to load).
   final String monogram;
+
+  /// The company logo shown in the badge.
+  final String? logoAsset;
 
   /// A plain type badge (e.g. Part-time) for roles without [engagements].
   final EmploymentType? employmentType;
@@ -74,5 +79,6 @@ class Experience extends Equatable {
     highlights,
     companyUrl,
     monogram,
+    logoAsset,
   ];
 }

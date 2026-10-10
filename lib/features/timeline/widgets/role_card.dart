@@ -93,6 +93,7 @@ class _RoleBody extends StatelessWidget {
                 company: experience.company,
                 url: experience.companyUrl,
                 monogram: experience.monogram,
+                logoAsset: experience.logoAsset,
                 accent: accent,
               ),
             ),

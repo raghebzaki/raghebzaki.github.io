@@ -32,6 +32,8 @@ flutter:
 
   assets:
     - assets/images/
+    # Asset directories are not recursive: subfolders need their own entry.
+    - assets/images/companies/
     - path: assets/icons/
       transformers:
         - package: vector_graphics_compiler

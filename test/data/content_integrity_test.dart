@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ragheb_portfolio/data/static_portfolio_repository.dart';
 import 'package:ragheb_portfolio/domain/entities/experience.dart';
@@ -78,6 +80,22 @@ void main() {
       'https://www.linkedin.com/company/sejall-technology/',
     ]);
     expect(roles.map((r) => r.monogram), ['CP', 'C5', 'SI', 'CD', 'SJ']);
+  });
+
+  test('every role has a company logo asset that exists', () {
+    const dir = 'assets/images/companies';
+    expect(repo.experience.map((r) => r.logoAsset), [
+      '$dir/cairo_photography_club_logo.jpeg',
+      '$dir/cloudsoft5_logo.jpeg',
+      '$dir/sutum_ict_consulting_logo.jpeg',
+      '$dir/coddiv_logo.jpeg',
+      '$dir/sejall_logo.jpeg',
+    ]);
+    for (final role in repo.experience) {
+      expect(File(role.logoAsset!).existsSync(), isTrue, reason: role.company);
+    }
+    // Asset directories are not recursive, so the folder needs its own entry.
+    expect(File('pubspec.yaml').readAsStringSync(), contains('- $dir/'));
   });
 
   test('Cairo Photo Club role', () {

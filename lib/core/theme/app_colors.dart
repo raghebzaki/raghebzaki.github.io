@@ -18,6 +18,9 @@ abstract final class AppColors {
   static const Color textSecondary = Color(0xFF94A3B8);
   static const Color textEmphasis = Color(0xFFCBD5E1);
   static const Color textMuted = Color(0xFF64748B);
+
+  /// Tile behind company logos (they are drawn on white).
+  static const Color logoTile = Color(0xFFFFFFFF);
   static const Color textBright = Color(0xFFFFFFFF);
   static const Color onAccent = Color(0xFF04101A);
 

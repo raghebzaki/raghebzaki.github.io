@@ -118,6 +118,9 @@ abstract final class AppLayout {
   static const double companyBadgeSize = 44;
   static const double companyArrowSize = 14;
 
+  /// Inset of a company logo inside its badge.
+  static const double companyLogoPadding = 4;
+
   /// Centres the rail dot on the company badge: card top padding (24) + half
   /// the badge (22) − half the dot (6).
   static const double timelineDotTop = 24 + 44 / 2 - 12 / 2;

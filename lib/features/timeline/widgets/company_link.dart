@@ -15,12 +15,16 @@ class CompanyLink extends StatefulWidget {
     required this.url,
     required this.monogram,
     required this.accent,
+    this.logoAsset,
     super.key,
   });
 
   final String company;
   final String url;
   final String monogram;
+
+  /// Company logo; [monogram] is the fallback when absent or it fails to load.
+  final String? logoAsset;
 
   /// The role's rail-dot colour, reused for the badge accent.
   final Color accent;
@@ -102,17 +106,14 @@ class _CompanyLinkState extends State<CompanyLink> {
                               ]
                             : const [],
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        widget.monogram,
-                        // Lifted toward the text colour so dark accents
-                        // (blue700) stay legible on the dark badge.
-                        style: AppTextStyles.companyMonogram.copyWith(
-                          color: Color.lerp(
-                            accent,
-                            AppColors.textPrimary,
-                            0.35,
-                          ),
+                      child: ClipRRect(
+                        // Inside the 1px border.
+                        borderRadius: BorderRadius.circular(
+                          AppRadii.button - 1,
+                        ),
+                        child: _BadgeContent(
+                          logoAsset: widget.logoAsset,
+                          monogram: _Monogram(widget.monogram, accent: accent),
                         ),
                       ),
                     ),
@@ -159,6 +160,62 @@ class _CompanyLinkState extends State<CompanyLink> {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The logo on a white tile (the logos are drawn on white), or [monogram] when
+/// there is no logo, while it loads, or if it fails to load.
+class _BadgeContent extends StatelessWidget {
+  const _BadgeContent({required this.logoAsset, required this.monogram});
+
+  final String? logoAsset;
+  final Widget monogram;
+
+  @override
+  Widget build(BuildContext context) {
+    final asset = logoAsset;
+    if (asset == null) return monogram;
+    final dpr = MediaQuery.devicePixelRatioOf(context);
+    return Image.asset(
+      asset,
+      fit: BoxFit.contain,
+      cacheWidth: (AppLayout.companyBadgeSize * dpr).ceil(),
+      filterQuality: FilterQuality.medium,
+      excludeFromSemantics: true,
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (frame == null && !wasSynchronouslyLoaded) return monogram;
+        return ColoredBox(
+          color: AppColors.logoTile,
+          child: Padding(
+            padding: const EdgeInsets.all(AppLayout.companyLogoPadding),
+            child: child,
+          ),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) => monogram,
+    );
+  }
+}
+
+class _Monogram extends StatelessWidget {
+  const _Monogram(this.text, {required this.accent});
+
+  final String text;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      key: const ValueKey('company-monogram'),
+      child: Text(
+        text,
+        // Lifted toward the text colour so dark accents (blue700) stay
+        // legible on the dark badge.
+        style: AppTextStyles.companyMonogram.copyWith(
+          color: Color.lerp(accent, AppColors.textPrimary, 0.35),
         ),
       ),
     );

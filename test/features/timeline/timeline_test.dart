@@ -64,7 +64,10 @@ void main() {
     ]);
     for (var i = 0; i < roles.length; i++) {
       expect(inCard(i, find.text(roles[i].company)), findsOneWidget);
-      expect(inCard(i, find.text(roles[i].monogram)), findsOneWidget);
+      expect(
+        inCard(i, find.byKey(const ValueKey('company-badge'))),
+        findsOneWidget,
+      );
     }
     // Cards are stacked newest first.
     final tops = [
@@ -263,6 +266,78 @@ void main() {
         ),
       );
       expect(ring, findsOneWidget);
+    });
+  });
+
+  group('company logos', () {
+    String? assetOf(Image image) {
+      final provider = image.image;
+      final inner = provider is ResizeImage ? provider.imageProvider : provider;
+      return inner is AssetImage ? inner.assetName : null;
+    }
+
+    testWidgets('each badge shows its company logo', (tester) async {
+      await pumpSection(tester, SectionId.timeline);
+      for (var i = 0; i < 5; i++) {
+        final image = tester.widget<Image>(
+          inCard(
+            i,
+            find.descendant(
+              of: find.byKey(const ValueKey('company-badge')),
+              matching: find.byType(Image),
+            ),
+          ),
+        );
+        expect(assetOf(image), roles[i].logoAsset);
+        expect(image.fit, BoxFit.contain);
+      }
+    });
+
+    Future<void> pumpBadge(WidgetTester tester, String asset) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: CompanyLink(
+                company: 'Acme',
+                url: 'https://www.linkedin.com/company/acme/',
+                monogram: 'AC',
+                accent: AppColors.cyan400,
+                logoAsset: asset,
+              ),
+            ),
+          ),
+        ),
+      );
+      // Real image decoding needs real async time.
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 500)),
+      );
+      await tester.pump();
+    }
+
+    final logoTile = find.byWidgetPredicate(
+      (w) => w is ColoredBox && w.color == AppColors.logoTile,
+    );
+
+    testWidgets('a loaded logo sits on a white tile inside the 44px badge', (
+      tester,
+    ) async {
+      await pumpBadge(tester, roles.first.logoAsset!);
+      expect(logoTile, findsOneWidget);
+      expect(find.byKey(const ValueKey('company-monogram')), findsNothing);
+      expect(
+        tester.getSize(find.byKey(const ValueKey('company-badge'))),
+        const Size.square(AppLayout.companyBadgeSize),
+      );
+    });
+
+    testWidgets('a missing logo falls back to the monogram', (tester) async {
+      await pumpBadge(tester, 'assets/images/companies/missing_logo.jpeg');
+      expect(find.byKey(const ValueKey('company-monogram')), findsOneWidget);
+      expect(find.text('AC'), findsOneWidget);
+      expect(logoTile, findsNothing);
+      expect(tester.takeException(), isNull);
     });
   });
 
